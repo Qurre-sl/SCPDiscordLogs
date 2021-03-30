@@ -8,10 +8,10 @@ Put [DiscordLogs.js](https://github.com/fydne/SCPDiscordLogs/blob/main/DiscordLo
 
 Example for use on multiple servers.
 ```json
-7777:{
+{
     ...
 },
-7778:{
+{
     ...
 }
 ```
