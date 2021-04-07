@@ -31,7 +31,64 @@ logs_ip: localhost
 Translation of logs:
 ```yaml
 /*EN*/
-/*soon...*/
+/*translated by [NPG] nekto™#0021*/
+logs_waiting: :hourglass: Waiting for players...
+logs_round_info: Players online: %players%. Round duration: %time% минут. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%
+logs_round_start: :arrow_forward: Round started: %players% players online.
+logs_round_end: :stop_button: Round ended: %players% players online.
+logs_item_change: :stop_button: Round ended: %players% players online.
+logs_item_drop: %player% dropped %item%.
+logs_item_pickup: %player% picked up %item%.
+logs_alpha_detonated: Alpha-warhead has been detonated.
+logs_alpha_active: Alpha-warhead has been activated.
+logs_alpha_not_detonated: Alpha-warhead not detonated.
+logs_alpha_detonation: :radioactive: **The Alpha warhead was successfully detonated**
+logs_alpha_start: :radioactive: **Alpha-warhed has been activated, %time% seconds to detonation.**
+logs_alpha_stop: ***%player% actvivated the Alpha-warhead.***
+logs_alpha_panel: %player% got access to the alpha warhead detonation button cover.
+logs_generator_activate: Generator has been activated.
+logs_generator_inject: %player% insert weapon tablet to generator.
+logs_generator_open: %player% opened generator.
+logs_generator_unlock: %player% unlocked generator.
+logs_generator_close: %player% closed generator.
+logs_generator_ejected: %player% ejected weapon tablet from generator.
+logs_banned: :no_entry: %player% was banned %issuer% for %reason%. Ban expires: %time%
+logs_report_cheater: **Cheater gas been reported  by: %sender%. Reported player - %target%. Reason: %reason%.**
+logs_portal_create: %player% Created portal.
+logs_portal_use: %player% Used portal.
+logs_pocket_enter: %player% hit the pocket dimension.
+logs_pocket_escape: %player% escaped from pocket dimension.
+logs_femur_enter: %player% sacrificed himself in SCP 106 cell.
+logs_106_contain: %player% succesfuly recontained SCP 106.
+logs_079_getexp: %player% get %exp% for %type%.
+logs_079_getlvl: %player% get %lvl% SCP 079 level.
+logs_weapon_reload: %player% reloaded weapon: %weapon%.
+logs_interact_locker: %player% оpened locker.
+logs_interact_tesla: %player% trigered tesla gate.
+logs_interact_lift: %player% called elevator.
+logs_interact_door_close: %player% close door: %door%.
+logs_interact_door_open: %player% opened: %door%.
+logs_914_activate: %player% activated SCP 914, on settings: %state%.
+logs_914_change: %player% changed SCP 914 settings to %setting%.
+logs_914_upgrade: SCP 914 upgraded:\nPlayers:%players%.\nItems:%items%.
+logs_join: :arrow_right: **%player% connected to the server.**
+logs_leave: :arrow_left: **%player% left the server.**
+logs_uncuff: :unlock: %target% has been uncuffed by %uncuffer%
+logs_cuff: :lock: %target% has been cuffed by %cuffer%
+logs_icom_speak: :loud_sound: %player% strted using intercom.
+logs_group_change: %player% has changed his role to: **%group%**.
+logs_lcz_decon: :biohazard: **Light Containment zone decontamination sequence has been started**
+logs_team_spawn: %team% team arrived with number of %players% units.
+logs_grenade_throw: :bomb: %player% threw a grenade.
+logs_medical_use: :medical_symbol: %player% used %item%.
+logs_escape: %player% has escaped, his new role is: %role%.
+logs_spawn: %player% spawned as %role%.
+logs_ra: :keyboard: %player% used command: %command%
+logs_console: %player% used ingame command [`]: %command%
+logs_damage_teamkill: :crossed_swords: **%attacker% damaged teamate %target% for %amount%, using %tool%.**
+logs_damage: %attacker% damaged %target% for %amount%, using %tool%.
+logs_kill_teamkill: :o: **%killer% teamkilled %target% using %tool%.**
+logs_kill: :skull_crossbones: **%killer% killed %target% using %tool%.**
 ```
 ```yaml
 /*RU*/
