@@ -33,7 +33,7 @@ Translation of logs:
 /*EN*/
 /*translated by [NPG] nekto™#0021*/
 logs_waiting: :hourglass: Waiting for players...
-logs_round_info: Players online: %players%. Round duration: %time% минут. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%
+logs_round_info: Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%
 logs_round_start: :arrow_forward: Round started: %players% players online.
 logs_round_end: :stop_button: Round ended: %players% players online.
 logs_item_change: :stop_button: Round ended: %players% players online.
