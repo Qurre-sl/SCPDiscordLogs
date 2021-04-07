@@ -36,7 +36,7 @@ logs_waiting: :hourglass: Waiting for players...
 logs_round_info: Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%
 logs_round_start: :arrow_forward: Round started: %players% players online.
 logs_round_end: :stop_button: Round ended: %players% players online.
-logs_item_change: :stop_button: Round ended: %players% players online.
+logs_item_change: %player% changed the item in hand: %olditem% -> %newitem%.
 logs_item_drop: %player% dropped %item%.
 logs_item_pickup: %player% picked up %item%.
 logs_alpha_detonated: Alpha-warhead has been detonated.
@@ -53,7 +53,7 @@ logs_generator_unlock: %player% unlocked generator.
 logs_generator_close: %player% closed generator.
 logs_generator_ejected: %player% ejected weapon tablet from generator.
 logs_banned: :no_entry: %player% was banned %issuer% for %reason%. Ban expires: %time%
-logs_report_cheater: **Cheater gas been reported  by: %sender%. Reported player - %target%. Reason: %reason%.**
+logs_report_cheater: **Cheater has been reported  by: %sender%. Reported player - %target%. Reason: %reason%.**
 logs_portal_create: %player% Created portal.
 logs_portal_use: %player% Used portal.
 logs_pocket_enter: %player% hit the pocket dimension.
@@ -96,7 +96,7 @@ logs_waiting: :hourglass: Ожидание игроков...
 logs_round_info: Игроков онлайн: %players%. Длительность раунда: %time% минут. Живых людей: %alive%. Живых scp: %scps%. %alpha% IP: %ip%
 logs_round_start: :arrow_forward: Раунд запущен: %players% игроков на сервере.
 logs_round_end: :stop_button: Раунд закончен: %players% игроков онлайн.
-logs_item_change: :stop_button: Раунд закончен: %players% игроков онлайн.
+logs_item_change: %player% поменял предмет в руке: %olditem% -> %newitem%.
 logs_item_drop: %player% дропнул %item%.
 logs_item_pickup: %player% подобрал %item%.
 logs_alpha_detonated: Альфа-Боеголовка взорвана.
