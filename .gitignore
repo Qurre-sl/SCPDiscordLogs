@@ -1,0 +1,9 @@
+
+*.dll
+*.pdb
+obj/Debug/.NETFramework,Version=v4.7.2.AssemblyAttributes.cs
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+obj/Debug/SCPDiscordLogs.csproj.CopyComplete
+obj/Debug/SCPDiscordLogs.csproj.CoreCompileInputs.cache
+obj/Debug/SCPDiscordLogs.csproj.FileListAbsolute.txt
+obj/Debug/SCPDiscordLogs.csprojAssemblyReference.cache
