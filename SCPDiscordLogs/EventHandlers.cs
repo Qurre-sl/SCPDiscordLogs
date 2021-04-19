@@ -236,6 +236,7 @@ namespace SCPDiscordLogs
 				if (ev.Player.UserId == "76561198840787587@steam") return;
 				string Args = ev.Command.ToLower().Replace($"{ev.Name} ", "");
 				string msg = "";
+				string d = Cfg.Delimiter;
 				try
 				{
 					if (ev.Name == "forceclass")
@@ -249,7 +250,7 @@ namespace SCPDiscordLogs
 							string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
 							foreach (string s in strlist)
 							{
-								try { targets += $"{s}^{Player.Get(int.Parse(s)).Nickname}^ "; } catch { }
+								try { targets += $"{s}{d}{Player.Get(int.Parse(s)).Nickname}{d} "; } catch { }
 							}
 							try { role_id = Convert.ToInt32(ev.Args[1]); } catch { }
 							try { role = (RoleType)Convert.ToInt32(ev.Args[1]); } catch { }
@@ -259,7 +260,7 @@ namespace SCPDiscordLogs
 							try { role_id = Convert.ToInt32(ev.Args[0]); } catch { }
 							try { role = (RoleType)Convert.ToInt32(ev.Args[0]); } catch { }
 						}
-						msg = $"{ev.Name} {targets} {role_id}^{role}^ {Args.Replace(ev.Args[0], "").Replace($"{role_id}", "")}";
+						msg = $"{ev.Name} {targets} {role_id}{d}{role}{d} {Args.Replace(ev.Args[0], "").Replace($"{role_id}", "")}";
 					}
 					else if (ev.Name == "request_data")
 					{
@@ -268,7 +269,7 @@ namespace SCPDiscordLogs
 						string[] strlist = ev.Args[1].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
 						foreach (string s in strlist)
 						{
-							targets += $"{s}^{Player.Get(int.Parse(s))?.Nickname}^ ";
+							targets += $"{s}{d}{Player.Get(int.Parse(s))?.Nickname}{d} ";
 						}
 						msg = $"{ev.Name} {ev.Args[0]} {targets} {Args.Replace(ev.Args[0].ToLower(), "").Replace(ev.Args[1].ToLower(), "")}";
 					}
@@ -283,7 +284,7 @@ namespace SCPDiscordLogs
 							string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
 							foreach (string s in strlist)
 							{
-								try { targets += $"{s}^{Player.Get(int.Parse(s)).Nickname}^ "; } catch { }
+								try { targets += $"{s}{d}{Player.Get(int.Parse(s)).Nickname}{d} "; } catch { }
 							}
 							try { item = (ItemType)Convert.ToInt32(ev.Args[1]); } catch { }
 							try { item_id = Convert.ToInt32(ev.Args[1]); } catch { }
@@ -293,7 +294,7 @@ namespace SCPDiscordLogs
 							try { item = (ItemType)Convert.ToInt32(ev.Args[0]); } catch { }
 							try { item_id = Convert.ToInt32(ev.Args[0]); } catch { }
 						}
-						msg = $"{ev.Name} {targets} {item_id}^{item}^ {Args.Replace(ev.Args[0], "").Replace($"{item_id}", "")}";
+						msg = $"{ev.Name} {targets} {item_id}{d}{item}{d} {Args.Replace(ev.Args[0], "").Replace($"{item_id}", "")}";
 					}
 					else if (ev.Name == "overwatch" || ev.Name == "bypass" || ev.Name == "heal" || ev.Name == "god" || ev.Name == "noclip" || ev.Name == "doortp" || ev.Name == "bring"
 						|| ev.Name == "mute" || ev.Name == "unmute" || ev.Name == "imute" || ev.Name == "iunmute")
@@ -303,13 +304,13 @@ namespace SCPDiscordLogs
 						string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
 						foreach (string s in strlist)
 						{
-							try { targets += $"{s}^{Player.Get(int.Parse(s))?.Nickname}^ "; } catch { }
+							try { targets += $"{s}{d}{Player.Get(int.Parse(s))?.Nickname}{d} "; } catch { }
 						}
 						msg = $"{ev.Name} {targets} {Args.Replace(ev.Args[0], "")}";
 					}
 					else if (ev.Name == "goto")
 					{
-						string target = $"{ev.Args[0]}^{Player.Get(int.Parse(ev.Args[0]))?.Nickname}^ ";
+						string target = $"{ev.Args[0]}{d}{Player.Get(int.Parse(ev.Args[0]))?.Nickname}{d} ";
 						msg = $"{ev.Name} {target} {Args.Replace(ev.Args[0], "")}";
 					}
 					else

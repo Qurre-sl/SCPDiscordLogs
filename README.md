@@ -27,11 +27,15 @@ Plugin installation is normal, put plugin in `~/.config`(`%AppData%` on Windows)
 Cfg:
 ```yml
 logs_ip: localhost
+#delimiter between id and nickname in ra
+#Example: [14:9:50] ⌨️ fydne - [data deleted]@steam used command: forceclass 2^fydne^ 1^ClassD^
+# ^ - delimiter
+logs_delimiter: ^
 ```
 Translation of logs:
 ```yaml
-/*EN*/
-/*translated by [NPG] nekto™#0021*/
+#EN
+#translated by [NPG] nekto™#0021
 logs_waiting: :hourglass: Waiting for players...
 logs_round_info: Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%
 logs_round_start: :arrow_forward: Round started: %players% players online.
@@ -91,7 +95,7 @@ logs_kill_teamkill: :o: **%killer% teamkilled %target% using %tool%.**
 logs_kill: :skull_crossbones: **%killer% killed %target% using %tool%.**
 ```
 ```yaml
-/*RU*/
+#RU
 logs_waiting: :hourglass: Ожидание игроков...
 logs_round_info: Игроков онлайн: %players%. Длительность раунда: %time% минут. Живых людей: %alive%. Живых scp: %scps%. %alpha% IP: %ip%
 logs_round_start: :arrow_forward: Раунд запущен: %players% игроков на сервере.

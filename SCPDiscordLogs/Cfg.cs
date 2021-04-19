@@ -3,6 +3,7 @@
 	public static class Cfg
 	{
 		public static string Ip { get; private set; }
+		public static string Delimiter { get; private set; }
 		internal static string T1 { get; private set; }
 		internal static string T2 { get; private set; }
 		internal static string T3 { get; private set; }
@@ -63,6 +64,7 @@
 		internal static void LoadReloadCfg()
 		{
 			Cfg.Ip = Plugin.Config.GetString("logs_ip", "localhost");
+			Cfg.Delimiter = Plugin.Config.GetString("logs_delimiter", "^");
 			Cfg.T1 = Plugin.Config.GetString("logs_waiting", ":hourglass: Ожидание игроков...");
 			Cfg.T56 = Plugin.Config.GetString("logs_round_info", "Игроков онлайн: %players%. Длительность раунда: %time% минут. Живых людей: %alive%. Живых scp: %scps%. %alpha% IP: %ip%");
 			Cfg.T2 = Plugin.Config.GetString("logs_round_start", ":arrow_forward: Раунд запущен: %players% игроков на сервере.");
