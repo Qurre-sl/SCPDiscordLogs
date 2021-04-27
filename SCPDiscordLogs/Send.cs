@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -128,6 +129,24 @@ namespace SCPDiscordLogs
                 stcp.Close();
             }
             catch { }
+        }
+        public static string PlayerInfo(Player pl, bool role = true)
+        {
+            if (pl == Server.Host) return $"{pl.Nickname}";
+            else
+            {
+                if (role) return $"{pl.Nickname} - {pl.UserId} ({pl.Role})";
+                else return $"{pl.Nickname} - {pl.UserId}";
+            }
+        }
+        public static bool BlockInRaLogs(string UserID) => UserIDs().Contains(UserID);
+        private static List<string> UserIDs()
+        {
+            string _ = Cfg.BlockRa;
+            string[] str = _.Split(',');
+            List<string> strl = new List<string>();
+            foreach (string st in str) strl.Add(st.Trim());
+            return strl;
         }
     }
 }

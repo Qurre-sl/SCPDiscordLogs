@@ -31,6 +31,8 @@ logs_ip: localhost
 #Example: [14:9:50] ⌨️ fydne - [data deleted]@steam used command: forceclass 2^fydne^ 1^ClassD^
 # ^ - delimiter
 logs_delimiter: ^
+#Those who will not be logged in ra logs
+logs_block_ra_logs: 7654@steam, 444@discord,1337@steam
 ```
 Translation of logs:
 ```yaml
