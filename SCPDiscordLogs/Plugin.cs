@@ -9,8 +9,8 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 0, 5);
-        public override Version NeededQurreVersion => new Version(1, 2, 9);
+        public override Version Version => new Version(1, 1, 0);
+        public override Version NeededQurreVersion => new Version(1, 3, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
@@ -74,6 +74,8 @@ namespace SCPDiscordLogs
 
             Events.Player.Ban += EventHandlers.Ban;
             Events.Player.Kick += EventHandlers.Kick;
+
+            Send.Connect();
         }
         public void UnregisterEvents()
         {
@@ -130,6 +132,8 @@ namespace SCPDiscordLogs
             Events.Player.Ban -= EventHandlers.Ban;
             Events.Player.Kick -= EventHandlers.Kick;
             EventHandlers = null;
+
+            Send.Disconnect();
         }
         public IEnumerator<float> Enumerator()
         {
