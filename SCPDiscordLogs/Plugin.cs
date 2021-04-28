@@ -1,5 +1,5 @@
 ﻿using GameCore;
-using System.Collections.Generic;
+using System.Threading;
 using Events = Qurre.Events;
 using Version = System.Version;
 namespace SCPDiscordLogs
@@ -9,20 +9,26 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 1, 0);
+        public override Version Version => new Version(1, 1, 1);
         public override Version NeededQurreVersion => new Version(1, 3, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
         public int MaxPlayers = ConfigFile.ServerConfig.GetInt("max_players", 100);
         private EventHandlers EventHandlers;
+        private bool FirstEnable = true;
         #endregion
         #region Events
         public void RegisterEvents()
         {
             Cfg.LoadReloadCfg();
+            if (FirstEnable)
+            {
+                Thread thread = new Thread(() => Enumerator());
+                thread.Start();
+                FirstEnable = false;
+            }
             Events.Round.WaitingForPlayers += Cfg.LoadReloadCfg;
-            MEC.Timing.RunCoroutine(Enumerator());
             EventHandlers = new EventHandlers();
             Events.Map.LCZDecon += EventHandlers.Decon;
             Events.SCPs.SCP079.GeneratorActivate += EventHandlers.GeneratorActivate;
@@ -135,14 +141,14 @@ namespace SCPDiscordLogs
 
             Send.Disconnect();
         }
-        public IEnumerator<float> Enumerator()
+        public void Enumerator()
         {
             for (; ; )
             {
-                yield return MEC.Timing.WaitForSeconds(1f);
                 try { Send.sendplayersinfo(); } catch { }
                 try { EventHandlers.UpdateServerStatus(); } catch { }
                 try { Send.fatalsendmsg(); } catch { }
+                Thread.Sleep(1000);
             }
         }
         #endregion

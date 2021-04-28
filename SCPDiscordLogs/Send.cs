@@ -8,7 +8,7 @@ using Qurre;
 using Qurre.API;
 namespace SCPDiscordLogs
 {
-    public class Send
+    internal class Send
     {
         #region ClosePls
         public static string PlayerInfo(Player pl, bool role = true)
@@ -193,7 +193,7 @@ namespace SCPDiscordLogs
             }
         }
     }
-    public class BotSender : CommandSender
+    internal class BotSender : CommandSender
     {
         public override void RaReply(string text, bool success, bool logToConsole, string overrideDisplay)
         {
