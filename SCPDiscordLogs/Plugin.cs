@@ -9,7 +9,7 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 1, 1);
+        public override Version Version => new Version(1, 1, 3);
         public override Version NeededQurreVersion => new Version(1, 3, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();
@@ -26,6 +26,8 @@ namespace SCPDiscordLogs
             {
                 Thread thread = new Thread(() => Enumerator());
                 thread.Start();
+                Thread thread_ = new Thread(() => ThreadSendMsg());
+                thread_.Start();
                 FirstEnable = false;
             }
             Events.Round.WaitingForPlayers += Cfg.LoadReloadCfg;
@@ -141,14 +143,21 @@ namespace SCPDiscordLogs
 
             Send.Disconnect();
         }
-        public void Enumerator()
+        private void Enumerator()
         {
             for (; ; )
             {
                 try { Send.sendplayersinfo(); } catch { }
                 try { EventHandlers.UpdateServerStatus(); } catch { }
-                try { Send.fatalsendmsg(); } catch { }
                 Thread.Sleep(1000);
+            }
+        }
+        private void ThreadSendMsg()
+        {
+            for (; ; )
+            {
+                try { Send.fatalsendmsg(); } catch { }
+                Thread.Sleep(5000);
             }
         }
         #endregion

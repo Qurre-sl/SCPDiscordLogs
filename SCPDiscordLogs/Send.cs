@@ -16,8 +16,9 @@ namespace SCPDiscordLogs
             if (pl == Server.Host) return $"{pl.Nickname}";
             else
             {
-                if (role) return $"{pl.Nickname} - {pl.UserId} ({pl.Role})";
-                else return $"{pl.Nickname} - {pl.UserId}";
+                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`");
+                if (role) return $"{nick} - {pl.UserId} ({pl.Role})";
+                else return $"{nick} - {pl.UserId}";
             }
         }
         public static bool BlockInRaLogs(string UserID) => UserIDs().Contains(UserID);
@@ -81,7 +82,7 @@ namespace SCPDiscordLogs
         {
             try
             {
-                if (Round.IsStarted)
+                if (Round.Started)
                 {
                     string str = $"ra=;=[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {cdata}{statre}";
                     byte[] ba = Encoding.UTF8.GetBytes(str);
@@ -94,7 +95,7 @@ namespace SCPDiscordLogs
         {
             try
             {
-                if (Round.IsStarted)
+                if (Round.Started)
                 {
                     string str = $"tk=;=[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {cdata}{statre}";
                     byte[] ba = Encoding.UTF8.GetBytes(str);
@@ -108,14 +109,8 @@ namespace SCPDiscordLogs
             try
             {
                 string str = "";
-                if (time == "kick")
-                {
-                    str = $"kick=;={banned}=;={banner}=;={reason}{statre}";
-                }
-                else
-                {
-                    str = $"ban=;={banned}=;={banner}=;={reason}=;={time}{statre}";
-                }
+                if (time == "kick") str = $"kick=;={banned}=;={banner}=;={reason}{statre}";
+                else str = $"ban=;={banned}=;={banner}=;={reason}=;={time}{statre}";
                 byte[] ba = Encoding.UTF8.GetBytes(str);
                 socket.Send(ba);
             }
@@ -144,7 +139,7 @@ namespace SCPDiscordLogs
                         socket.Close();
                     }
                     socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect(Cfg.Ip, ServerConsole.Port);
+                    socket.Connect(Cfg.Ip, Server.Port);
                 }
                 catch
                 {

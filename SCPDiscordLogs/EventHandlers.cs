@@ -315,12 +315,12 @@ namespace SCPDiscordLogs
 					}
 					else
 					{
-						msg = $"{ev.Name} {Args}";
+						msg = $"{ev.Command}";
 					}
 				}
 				catch
 				{
-					msg = $"{ev.Name} {Args}";
+					msg = $"{ev.Command}";
 				}
 				Send.sendmsg(Cfg.T57.Replace("%command%", msg).Replace("%player%", Send.PlayerInfo(ev.Player, false)));
 				Send.sendra(Cfg.T57.Replace("%command%", msg).Replace("%player%", Send.PlayerInfo(ev.Player, false)));
