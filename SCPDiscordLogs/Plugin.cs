@@ -9,7 +9,7 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 1, 4);
+        public override Version Version => new Version(1, 1, 5);
         public override Version NeededQurreVersion => new Version(1, 4, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();
@@ -65,7 +65,6 @@ namespace SCPDiscordLogs
             Events.Player.InteractDoor += EventHandlers.InteractDoor;
             Events.Player.InteractLift += EventHandlers.InteractLift;
             Events.Player.InteractLocker += EventHandlers.InteractLocker;
-            Events.Player.IcomSpeak += EventHandlers.IcomSpeak;
             Events.Player.Cuff += EventHandlers.Cuff;
             Events.Player.UnCuff += EventHandlers.UnCuff;
             Events.SCPs.SCP106.PortalUsing += EventHandlers.PortalUsing;
@@ -122,7 +121,6 @@ namespace SCPDiscordLogs
             Events.Player.InteractDoor -= EventHandlers.InteractDoor;
             Events.Player.InteractLift -= EventHandlers.InteractLift;
             Events.Player.InteractLocker -= EventHandlers.InteractLocker;
-            Events.Player.IcomSpeak -= EventHandlers.IcomSpeak;
             Events.Player.Cuff -= EventHandlers.Cuff;
             Events.Player.UnCuff -= EventHandlers.UnCuff;
             Events.SCPs.SCP106.PortalUsing -= EventHandlers.PortalUsing;

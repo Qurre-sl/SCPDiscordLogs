@@ -84,10 +84,6 @@ namespace SCPDiscordLogs
 		{
 			if (ev.Allowed) Send.sendmsg(Cfg.T24.Replace("%target%", Send.PlayerInfo(ev.Target)).Replace("%cuffer%", Send.PlayerInfo(ev.Cuffer)));
 		}
-		public void IcomSpeak(IcomSpeakEvent ev)
-		{
-			try { if (ev.Allowed) Send.sendmsg(Cfg.T25.Replace("%player%", Send.PlayerInfo(ev.Player))); } catch { }
-		}
 		public void Pickup(PickupItemEvent ev)
 		{
 			if (ev.Allowed) Send.sendmsg(Cfg.T26.Replace("%player%", Send.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Pickup.ItemId}"));

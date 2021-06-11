@@ -81,7 +81,6 @@ logs_join: :arrow_right: **%player% connected to the server.**
 logs_leave: :arrow_left: **%player% left the server.**
 logs_uncuff: :unlock: %target% has been uncuffed by %uncuffer%
 logs_cuff: :lock: %target% has been cuffed by %cuffer%
-logs_icom_speak: :loud_sound: %player% strted using intercom.
 logs_group_change: %player% has changed his role to: **%group%**.
 logs_lcz_decon: :biohazard: **Light Containment zone decontamination sequence has been started**
 logs_team_spawn: %team% team arrived with number of %players% units.
@@ -141,7 +140,6 @@ logs_join: :arrow_right: **%player% присоединился к игре.**
 logs_leave: :arrow_left: **%player% ливнул с сервера.**
 logs_uncuff: :unlock: %target% был освобожден %uncuffer%
 logs_cuff: :lock: %target% был связан %cuffer%
-logs_icom_speak: :loud_sound: %player% начал использовать интерком.
 logs_group_change: %player% получил роль: **%group%**.
 logs_lcz_decon: :biohazard: **Началось обеззараживание легкой зоны**
 logs_team_spawn: Приехал отряд %team% в кол-ве %players% человек.

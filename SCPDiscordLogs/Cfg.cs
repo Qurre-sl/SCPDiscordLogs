@@ -29,7 +29,6 @@
 		internal static string T22 { get; private set; }
 		internal static string T23 { get; private set; }
 		internal static string T24 { get; private set; }
-		internal static string T25 { get; private set; }
 		internal static string T26 { get; private set; }
 		internal static string T27 { get; private set; }
 		internal static string T28 { get; private set; }
@@ -110,7 +109,6 @@
 			Cfg.T35 = Plugin.Config.GetString("logs_leave", ":arrow_left: **%player% ливнул с сервера.**");
 			Cfg.T23 = Plugin.Config.GetString("logs_uncuff", ":unlock: %target% был освобожден %uncuffer%");
 			Cfg.T24 = Plugin.Config.GetString("logs_cuff", ":lock: %target% был связан %cuffer%");
-			Cfg.T25 = Plugin.Config.GetString("logs_icom_speak", ":loud_sound: %player% начал использовать интерком.");
 			Cfg.T27 = Plugin.Config.GetString("logs_group_change", "%player% получил роль: **%group%**.");
 			Cfg.T28 = Plugin.Config.GetString("logs_lcz_decon", ":biohazard: **Началось обеззараживание легкой зоны**");
 			Cfg.T34 = Plugin.Config.GetString("logs_team_spawn", "Приехал отряд %team% в кол-ве %players% человек.");
