@@ -126,6 +126,23 @@ namespace SCPDiscordLogs
             }
             catch { }
         }
+        internal static void CheckConnect()
+        {
+            if (!Connected())
+            {
+                try
+                {
+                    if (socket != null && socket.IsBound)
+                    {
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close();
+                    }
+                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    socket.Connect(Cfg.Ip, Server.Port);
+                }
+                catch { }
+            }
+        }
         public static void Disconnect() => socket.Disconnect(false);
         public static void Connect()
         {
