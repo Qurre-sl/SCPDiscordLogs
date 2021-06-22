@@ -33,6 +33,19 @@ logs_ip: localhost
 logs_delimiter: ^
 #Those who will not be logged in ra logs
 logs_block_ra_logs: 7654@steam, 444@discord,1337@steam
+#server name
+logs_server_name: Qurre
+#webhook avatar
+logs_avatar: https://cdn.scpsl.store/qurre/qurre_ol.png
+#logs will be sent to webhook if bot is dead
+logs_webhook: 
+#bans and kicks will be sent to the webhook if the bot is dead
+logs_webhook_bans_kicks: 
+
+logs_kick: Kick
+logs_ban: Ban
+logs_kick_msg: %kicked% has been kicked by %kicker%. Reason: %reason%
+logs_kick_msg: %banned% has been banned by %banner%. Reason: %reason%\nUntil %to%
 ```
 Translation of logs:
 ```yaml

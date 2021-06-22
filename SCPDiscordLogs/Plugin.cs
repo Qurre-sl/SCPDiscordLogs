@@ -9,7 +9,7 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 1, 7);
+        public override Version Version => new Version(1, 2, 0);
         public override Version NeededQurreVersion => new Version(1, 4, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();
@@ -60,7 +60,7 @@ namespace SCPDiscordLogs
             Events.Player.TeslaTrigger += EventHandlers.TeslaTrigger;
             Events.Player.ThrowGrenade += EventHandlers.ThrowGrenade;
             Events.Player.Damage += EventHandlers.Damage;
-            Events.Player.Dead += EventHandlers.Dead;
+            Events.Player.Dies += EventHandlers.Dead;
             Events.Player.Banned += EventHandlers.Banned;
             Events.Player.InteractDoor += EventHandlers.InteractDoor;
             Events.Player.InteractLift += EventHandlers.InteractLift;
@@ -116,7 +116,7 @@ namespace SCPDiscordLogs
             Events.Player.TeslaTrigger -= EventHandlers.TeslaTrigger;
             Events.Player.ThrowGrenade -= EventHandlers.ThrowGrenade;
             Events.Player.Damage -= EventHandlers.Damage;
-            Events.Player.Dead -= EventHandlers.Dead;
+            Events.Player.Dies -= EventHandlers.Dead;
             Events.Player.Banned -= EventHandlers.Banned;
             Events.Player.InteractDoor -= EventHandlers.InteractDoor;
             Events.Player.InteractLift -= EventHandlers.InteractLift;
@@ -145,7 +145,7 @@ namespace SCPDiscordLogs
         {
             for (; ; )
             {
-                try { Send.sendplayersinfo(); } catch { }
+                try { Send.PlayersInfo(); } catch { }
                 try { EventHandlers.UpdateServerStatus(); } catch { }
                 Thread.Sleep(1000);
             }
@@ -154,9 +154,9 @@ namespace SCPDiscordLogs
         {
             for (; ; )
             {
-                try { Send.fatalsendmsg(); } catch { }
-                try { Send.CheckConnect(); } catch { }
+                try { Send.FatalMsg(); } catch { }
                 Thread.Sleep(5000);
+                try { Send.CheckConnect(); } catch { }
             }
         }
         #endregion
