@@ -325,7 +325,7 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		public void Ban(BanEvent ev) => Send.BanKick(ev.Reason, Send.PlayerInfo(ev.Target, false), ev.Issuer.Nickname, DateTime.Now.AddSeconds(ev.Duration).ToString("dd.MM.yyyy HH:mm"));
-		public void Kick(KickEvent ev) => Send.BanKick(ev.Reason, ev.Target.Nickname, ev.Issuer.Nickname, "kick");
+		public void Ban(BanEvent ev) => Send.BanKick(ev.Reason, Send.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), DateTime.Now.AddSeconds(ev.Duration).ToString("dd.MM.yyyy HH:mm"));
+		public void Kick(KickEvent ev) => Send.BanKick(ev.Reason, Send.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), "kick");
 	}
 }

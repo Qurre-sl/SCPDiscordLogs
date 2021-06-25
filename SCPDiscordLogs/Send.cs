@@ -21,6 +21,10 @@ namespace SCPDiscordLogs
                 else return $"{nick} - {pl.UserId}";
             }
         }
+        public static string AntiMD(string text)
+        {
+            return text.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`");
+        }
         public static bool BlockInRaLogs(string UserID) => UserIDs().Contains(UserID);
         private static List<string> UserIDs()
         {
@@ -191,22 +195,17 @@ namespace SCPDiscordLogs
         internal static void Disconnect() => socket.Disconnect(false);
         internal static void Connect()
         {
-            while (!Connected())
+            try
             {
-                try
+                if (socket != null && socket.IsBound)
                 {
-                    if (socket != null && socket.IsBound)
-                    {
-                        socket.Shutdown(SocketShutdown.Both);
-                        socket.Close();
-                    }
-                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect(Cfg.Ip, Server.Port);
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
                 }
-                catch
-                {
-                }
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket.Connect(Cfg.Ip, Server.Port);
             }
+            catch { }
             Thread messageThread = new Thread(() => BotListener());
             messageThread.Start();
         }
