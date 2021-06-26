@@ -11,16 +11,6 @@ namespace SCPDiscordLogs
     internal class Send
     {
         #region ClosePls
-        public static string PlayerInfo(Player pl, bool role = true)
-        {
-            if (pl == Server.Host) return $"{pl.Nickname}";
-            else
-            {
-                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`");
-                if (role) return $"{nick} - {pl.UserId} ({pl.Role})";
-                else return $"{nick} - {pl.UserId}";
-            }
-        }
         public static string AntiMD(string text)
         {
             return text.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`");
