@@ -146,7 +146,7 @@ namespace SCPDiscordLogs
 		{
 			if (ev.Player == null || ev.Player == Server.Host) return;
 			if (ev.Player?.Id == null) return;
-			Send.Msg(Cfg.T40.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%command%", $"{ev.Message}"));
+			Send.Msg(Cfg.T40.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%command%", $"{Send.AntiMD(ev.Message)}"));
 		}
 		public void Upgrade(UpgradeEvent ev)
 		{
@@ -319,8 +319,8 @@ namespace SCPDiscordLogs
 				{
 					msg = $"{ev.Command}";
 				}
-				Send.Msg(Cfg.T57.Replace("%command%", msg).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
-				Send.RemoteAdmin(Cfg.T57.Replace("%command%", msg).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
+				Send.Msg(Cfg.T57.Replace("%command%", Send.AntiMD(msg)).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
+				Send.RemoteAdmin(Cfg.T57.Replace("%command%", Send.AntiMD(msg)).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 				#endregion
 			}
 			catch { }

@@ -9,8 +9,8 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 2, 2);
-        public override Version NeededQurreVersion => new Version(1, 4, 0);
+        public override Version Version => new Version(1, 2, 3);
+        public override Version NeededQurreVersion => new Version(1, 5, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
@@ -31,11 +31,11 @@ namespace SCPDiscordLogs
             Events.Round.WaitingForPlayers += Cfg.LoadReloadCfg;
             EventHandlers = new EventHandlers();
             Events.Map.LCZDecon += EventHandlers.Decon;
-            Events.SCPs.SCP079.GeneratorActivate += EventHandlers.GeneratorActivate;
+            Events.Scp079.GeneratorActivate += EventHandlers.GeneratorActivate;
             Events.Alpha.Starting += EventHandlers.AlphaStart;
             Events.Alpha.Stopping += EventHandlers.AlphaStop;
             Events.Alpha.Detonated += EventHandlers.Detonation;
-            Events.SCPs.SCP914.Upgrade += EventHandlers.Upgrade;
+            Events.Scp914.Upgrade += EventHandlers.Upgrade;
 
             Events.Server.SendingRA += EventHandlers.SendingRA;
             Events.Round.WaitingForPlayers += EventHandlers.Waiting;
@@ -45,15 +45,15 @@ namespace SCPDiscordLogs
             Events.Round.TeamRespawn += EventHandlers.TeamRespawn;
             Events.Server.Report.Cheater += EventHandlers.ReportCheater;
 
-            Events.SCPs.SCP914.ChangeKnob += EventHandlers.ChangeKnob;
+            Events.Scp914.ChangeKnob += EventHandlers.ChangeKnob;
             Events.Player.MedicalUsed += EventHandlers.MedicalUsed;
             Events.Player.PickupItem += EventHandlers.Pickup;
             Events.Player.InteractGenerator += EventHandlers.InteractGenerator;
-            Events.SCPs.SCP079.GetLVL += EventHandlers.GetLVL;
-            Events.SCPs.SCP079.GetEXP += EventHandlers.GetEXP;
-            Events.SCPs.SCP106.PocketDimensionEscape += EventHandlers.PocketDimensionEscape;
-            Events.SCPs.SCP106.PocketDimensionEnter += EventHandlers.PocketDimensionEnter;
-            Events.SCPs.SCP106.PortalCreate += EventHandlers.PortalCreate;
+            Events.Scp079.GetLVL += EventHandlers.GetLVL;
+            Events.Scp079.GetEXP += EventHandlers.GetEXP;
+            Events.Scp106.PocketDimensionEscape += EventHandlers.PocketDimensionEscape;
+            Events.Scp106.PocketDimensionEnter += EventHandlers.PocketDimensionEnter;
+            Events.Scp106.PortalCreate += EventHandlers.PortalCreate;
             Events.Alpha.EnablePanel += EventHandlers.EnableAlphaPanel;
             Events.Player.TeslaTrigger += EventHandlers.TeslaTrigger;
             Events.Player.ThrowGrenade += EventHandlers.ThrowGrenade;
@@ -65,8 +65,8 @@ namespace SCPDiscordLogs
             Events.Player.InteractLocker += EventHandlers.InteractLocker;
             Events.Player.Cuff += EventHandlers.Cuff;
             Events.Player.UnCuff += EventHandlers.UnCuff;
-            Events.SCPs.SCP106.PortalUsing += EventHandlers.PortalUsing;
-            Events.SCPs.SCP106.FemurBreakerEnter += EventHandlers.Femur;
+            Events.Scp106.PortalUsing += EventHandlers.PortalUsing;
+            Events.Scp106.FemurBreakerEnter += EventHandlers.Femur;
             Events.Player.RechargeWeapon += EventHandlers.RechargeWeapon;
             Events.Player.DropItem += EventHandlers.Drop;
             Events.Player.Join += EventHandlers.Join;
@@ -74,8 +74,8 @@ namespace SCPDiscordLogs
             Events.Player.RoleChange += EventHandlers.RoleChange;
             Events.Player.GroupChange += EventHandlers.GroupChange;
             Events.Player.ItemChange += EventHandlers.ItemChange;
-            Events.SCPs.SCP914.Activating += EventHandlers.Activating;
-            Events.SCPs.SCP106.Contain += EventHandlers.Contain;
+            Events.Scp914.Activating += EventHandlers.Activating;
+            Events.Scp106.Contain += EventHandlers.Contain;
 
             Events.Player.Ban += EventHandlers.Ban;
             Events.Player.Kick += EventHandlers.Kick;
@@ -87,11 +87,11 @@ namespace SCPDiscordLogs
             Events.Round.WaitingForPlayers -= Cfg.LoadReloadCfg;
 
             Events.Map.LCZDecon -= EventHandlers.Decon;
-            Events.SCPs.SCP079.GeneratorActivate -= EventHandlers.GeneratorActivate;
+            Events.Scp079.GeneratorActivate -= EventHandlers.GeneratorActivate;
             Events.Alpha.Starting -= EventHandlers.AlphaStart;
             Events.Alpha.Stopping -= EventHandlers.AlphaStop;
             Events.Alpha.Detonated -= EventHandlers.Detonation;
-            Events.SCPs.SCP914.Upgrade -= EventHandlers.Upgrade;
+            Events.Scp914.Upgrade -= EventHandlers.Upgrade;
 
             Events.Server.SendingRA -= EventHandlers.SendingRA;
             Events.Round.WaitingForPlayers -= EventHandlers.Waiting;
@@ -101,15 +101,15 @@ namespace SCPDiscordLogs
             Events.Round.TeamRespawn -= EventHandlers.TeamRespawn;
             Events.Server.Report.Cheater -= EventHandlers.ReportCheater;
 
-            Events.SCPs.SCP914.ChangeKnob -= EventHandlers.ChangeKnob;
+            Events.Scp914.ChangeKnob -= EventHandlers.ChangeKnob;
             Events.Player.MedicalUsed -= EventHandlers.MedicalUsed;
             Events.Player.PickupItem -= EventHandlers.Pickup;
             Events.Player.InteractGenerator -= EventHandlers.InteractGenerator;
-            Events.SCPs.SCP079.GetLVL -= EventHandlers.GetLVL;
-            Events.SCPs.SCP079.GetEXP -= EventHandlers.GetEXP;
-            Events.SCPs.SCP106.PocketDimensionEscape -= EventHandlers.PocketDimensionEscape;
-            Events.SCPs.SCP106.PocketDimensionEnter -= EventHandlers.PocketDimensionEnter;
-            Events.SCPs.SCP106.PortalCreate -= EventHandlers.PortalCreate;
+            Events.Scp079.GetLVL -= EventHandlers.GetLVL;
+            Events.Scp079.GetEXP -= EventHandlers.GetEXP;
+            Events.Scp106.PocketDimensionEscape -= EventHandlers.PocketDimensionEscape;
+            Events.Scp106.PocketDimensionEnter -= EventHandlers.PocketDimensionEnter;
+            Events.Scp106.PortalCreate -= EventHandlers.PortalCreate;
             Events.Alpha.EnablePanel -= EventHandlers.EnableAlphaPanel;
             Events.Player.TeslaTrigger -= EventHandlers.TeslaTrigger;
             Events.Player.ThrowGrenade -= EventHandlers.ThrowGrenade;
@@ -121,8 +121,8 @@ namespace SCPDiscordLogs
             Events.Player.InteractLocker -= EventHandlers.InteractLocker;
             Events.Player.Cuff -= EventHandlers.Cuff;
             Events.Player.UnCuff -= EventHandlers.UnCuff;
-            Events.SCPs.SCP106.PortalUsing -= EventHandlers.PortalUsing;
-            Events.SCPs.SCP106.FemurBreakerEnter -= EventHandlers.Femur;
+            Events.Scp106.PortalUsing -= EventHandlers.PortalUsing;
+            Events.Scp106.FemurBreakerEnter -= EventHandlers.Femur;
             Events.Player.RechargeWeapon -= EventHandlers.RechargeWeapon;
             Events.Player.DropItem -= EventHandlers.Drop;
             Events.Player.Join -= EventHandlers.Join;
@@ -130,8 +130,8 @@ namespace SCPDiscordLogs
             Events.Player.RoleChange -= EventHandlers.RoleChange;
             Events.Player.GroupChange -= EventHandlers.GroupChange;
             Events.Player.ItemChange -= EventHandlers.ItemChange;
-            Events.SCPs.SCP914.Activating -= EventHandlers.Activating;
-            Events.SCPs.SCP106.Contain -= EventHandlers.Contain;
+            Events.Scp914.Activating -= EventHandlers.Activating;
+            Events.Scp106.Contain -= EventHandlers.Contain;
 
             Events.Player.Ban -= EventHandlers.Ban;
             Events.Player.Kick -= EventHandlers.Kick;
