@@ -10,7 +10,7 @@ namespace SCPDiscordLogs
             if (pl == Server.Host) return $"{pl.Nickname}";
             else
             {
-                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
+                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
                 if (role) return $"{nick} - {pl.UserId} ({pl.Role})";
                 else return $"{nick} - {pl.UserId}";
             }
