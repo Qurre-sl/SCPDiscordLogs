@@ -9,7 +9,7 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 2, 3);
+        public override Version Version => new Version(1, 2, 4);
         public override Version NeededQurreVersion => new Version(1, 5, 0);
         public override int Priority => 100000;
         public override void Enable() => RegisterEvents();

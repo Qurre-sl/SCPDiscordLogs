@@ -13,7 +13,7 @@ namespace SCPDiscordLogs
         #region ClosePls
         public static string AntiMD(string text)
         {
-            return text.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("@", "\\@");
+            return text.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
         }
         public static bool BlockInRaLogs(string UserID) => UserIDs().Contains(UserID);
         private static List<string> UserIDs()
