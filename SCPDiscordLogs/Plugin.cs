@@ -9,9 +9,9 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 2, 5);
-        public override Version NeededQurreVersion => new Version(1, 5, 0);
-        public override int Priority => 100000;
+        public override Version Version => new Version(1, 2, 6);
+        public override Version NeededQurreVersion => new Version(1, 6, 0);
+        public override int Priority => -100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
         public int MaxPlayers = ConfigFile.ServerConfig.GetInt("max_players", 100);
