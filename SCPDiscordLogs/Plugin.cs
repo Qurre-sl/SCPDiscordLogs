@@ -9,8 +9,8 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 2, 6);
-        public override Version NeededQurreVersion => new Version(1, 6, 0);
+        public override Version Version => new Version(1, 2, 7);
+        public override Version NeededQurreVersion => new Version(1, 8, 3);
         public override int Priority => -100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
@@ -45,8 +45,7 @@ namespace SCPDiscordLogs
             Events.Round.TeamRespawn += EventHandlers.TeamRespawn;
             Events.Server.Report.Cheater += EventHandlers.ReportCheater;
 
-            Events.Scp914.ChangeKnob += EventHandlers.ChangeKnob;
-            Events.Player.MedicalUsed += EventHandlers.MedicalUsed;
+            Events.Player.ItemUsed += EventHandlers.ItemUsed;
             Events.Player.PickupItem += EventHandlers.Pickup;
             Events.Player.InteractGenerator += EventHandlers.InteractGenerator;
             Events.Scp079.GetLVL += EventHandlers.GetLVL;
@@ -56,7 +55,7 @@ namespace SCPDiscordLogs
             Events.Scp106.PortalCreate += EventHandlers.PortalCreate;
             Events.Alpha.EnablePanel += EventHandlers.EnableAlphaPanel;
             Events.Player.TeslaTrigger += EventHandlers.TeslaTrigger;
-            Events.Player.ThrowGrenade += EventHandlers.ThrowGrenade;
+            Events.Player.ThrowItem += EventHandlers.ThrowItem;
             Events.Player.Damage += EventHandlers.Damage;
             Events.Player.Dies += EventHandlers.Dead;
             Events.Player.Banned += EventHandlers.Banned;
@@ -72,6 +71,7 @@ namespace SCPDiscordLogs
             Events.Player.Join += EventHandlers.Join;
             Events.Player.Leave += EventHandlers.Leave;
             Events.Player.RoleChange += EventHandlers.RoleChange;
+            Events.Player.Escape += EventHandlers.Escape;
             Events.Player.GroupChange += EventHandlers.GroupChange;
             Events.Player.ItemChange += EventHandlers.ItemChange;
             Events.Scp914.Activating += EventHandlers.Activating;
@@ -101,8 +101,7 @@ namespace SCPDiscordLogs
             Events.Round.TeamRespawn -= EventHandlers.TeamRespawn;
             Events.Server.Report.Cheater -= EventHandlers.ReportCheater;
 
-            Events.Scp914.ChangeKnob -= EventHandlers.ChangeKnob;
-            Events.Player.MedicalUsed -= EventHandlers.MedicalUsed;
+            Events.Player.ItemUsed -= EventHandlers.ItemUsed;
             Events.Player.PickupItem -= EventHandlers.Pickup;
             Events.Player.InteractGenerator -= EventHandlers.InteractGenerator;
             Events.Scp079.GetLVL -= EventHandlers.GetLVL;
@@ -112,7 +111,7 @@ namespace SCPDiscordLogs
             Events.Scp106.PortalCreate -= EventHandlers.PortalCreate;
             Events.Alpha.EnablePanel -= EventHandlers.EnableAlphaPanel;
             Events.Player.TeslaTrigger -= EventHandlers.TeslaTrigger;
-            Events.Player.ThrowGrenade -= EventHandlers.ThrowGrenade;
+            Events.Player.ThrowItem -= EventHandlers.ThrowItem;
             Events.Player.Damage -= EventHandlers.Damage;
             Events.Player.Dies -= EventHandlers.Dead;
             Events.Player.Banned -= EventHandlers.Banned;
@@ -128,6 +127,7 @@ namespace SCPDiscordLogs
             Events.Player.Join -= EventHandlers.Join;
             Events.Player.Leave -= EventHandlers.Leave;
             Events.Player.RoleChange -= EventHandlers.RoleChange;
+            Events.Player.Escape -= EventHandlers.Escape;
             Events.Player.GroupChange -= EventHandlers.GroupChange;
             Events.Player.ItemChange -= EventHandlers.ItemChange;
             Events.Scp914.Activating -= EventHandlers.Activating;

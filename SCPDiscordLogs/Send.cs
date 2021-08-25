@@ -43,6 +43,7 @@ namespace SCPDiscordLogs
                 if (Cfg.WebHook == "") return;
                 Webhook webhk = new Webhook(Cfg.WebHook);
                 webhk.Send(msg);
+                msg = "";
             }
         }
         internal static void Msg(string data)
