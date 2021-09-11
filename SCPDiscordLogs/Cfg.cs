@@ -82,7 +82,7 @@
 			Cfg.Kick = Plugin.Config.GetString("logs_kick", "Kick");
 			Cfg.Ban = Plugin.Config.GetString("logs_ban", "Ban");
 			Cfg.Kick_msg = Plugin.Config.GetString("logs_kick_msg", "%kicked% has been kicked by %kicker%. Reason: %reason%");
-			Cfg.Ban_msg = Plugin.Config.GetString("logs_kick_msg", "%banned% has been banned by %banner%. Reason: %reason%\nUntil %to%");
+			Cfg.Ban_msg = Plugin.Config.GetString("logs_ban_msg", "%banned% has been banned by %banner%. Reason: %reason%\nUntil %to%");
 
 			Cfg.T1 = Plugin.Config.GetString("logs_waiting", ":hourglass: Waiting for players...");
 			Cfg.T56 = Plugin.Config.GetString("logs_round_info", "Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%");
