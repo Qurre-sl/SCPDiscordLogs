@@ -100,6 +100,16 @@
             <see cref="F:Qurre.API.Objects.KeycardPermissions.Checkpoints"/>.
             </summary>
         </member>
+        <member name="P:Qurre.API.Server.RealEscape">
+            <summary>
+            <para>if true, then no items will be issued during the escape &amp; the escaped person will not change his location.</para>
+            </summary>
+        </member>
+        <member name="P:Qurre.API.Player.BlockSpawnTeleport">
+            <summary>
+            <para>After spawning, it becomes false again.</para>
+            </summary>
+        </member>
         <member name="P:Qurre.Plugin.Priority">
             <summary>
             <para>Plugin load priority.</para>

@@ -10,9 +10,18 @@ namespace SCPDiscordLogs
             if (pl == Server.Host) return $"{pl.Nickname}";
             else
             {
-                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
-                if (role) return $"{nick} - {pl.UserId} ({pl.Role})";
-                else return $"{nick} - {pl.UserId}";
+                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~")
+                    .Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
+                try
+                {
+                    if (role) return $"{nick} - {pl.UserId} ({pl.Role})";
+                    else return $"{nick} - {pl.UserId}";
+                }
+                catch
+                {
+                    try { return $"{nick} - {pl.UserId}"; }
+                    catch { return nick; }
+                }
             }
         }
         public static void SendMessage(string data, Status status = Status.Standart)

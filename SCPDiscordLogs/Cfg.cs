@@ -29,7 +29,7 @@
 		internal static string T14 { get; private set; }
 		internal static string T15 { get; private set; }
 		internal static string T16 { get; private set; }
-		//internal static string T17 { get; private set; }
+		internal static string T17 { get; private set; }
 		internal static string T18 { get; private set; }
 		internal static string T19 { get; private set; }
 		internal static string T20 { get; private set; }
@@ -121,7 +121,7 @@
 			Cfg.T49 = Plugin.Config.GetString("logs_interact_door_close", "%player% close door: %door%.");
 			Cfg.T50 = Plugin.Config.GetString("logs_interact_door_open", "%player% opened door: %door%.");
 			Cfg.T16 = Plugin.Config.GetString("logs_914_activate", "%player% activated SCP 914, on settings: %state%.");
-			//Cfg.T17 = Plugin.Config.GetString("logs_914_change", "%player% changed SCP 914 settings to %setting%.");
+			Cfg.T17 = Plugin.Config.GetString("logs_914_change", "%player% changed SCP 914 settings to %setting%.");
 			Cfg.T41 = Plugin.Config.GetString("logs_914_upgrade", "SCP 914 upgraded:\nPlayers:%players%.\nItems:%items%.");
 			Cfg.T22 = Plugin.Config.GetString("logs_join", ":arrow_right: **%player% connected to the server.**");
 			Cfg.T35 = Plugin.Config.GetString("logs_leave", ":arrow_left: **%player% left the server.**");

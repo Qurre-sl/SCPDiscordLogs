@@ -54,11 +54,11 @@ namespace SCPDiscordLogs
 		public void Activating(ActivatingEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T16.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%state%", $"{Qurre.API.Controllers.Scp914.KnobState}"));
-		}/*
-		public void ChangeKnob(ChangeKnobEvent ev)
+		}
+		public void KnobChange(KnobChangeEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T17.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%setting%", $"{ev.KnobSetting}"));
-		}*/
+			if (ev.Allowed) Send.Msg(Cfg.T17.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%setting%", $"{ev.Setting}"));
+		}
 		public void PocketDimensionEnter(PocketDimensionEnterEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T18.Replace("%player%", Api.PlayerInfo(ev.Player)));
@@ -151,7 +151,6 @@ namespace SCPDiscordLogs
 		public void SendingConsole(SendingConsoleEvent ev)
 		{
 			if (ev.Player == null || ev.Player == Server.Host) return;
-			if (ev.Player?.Id == null) return;
 			Send.Msg(Cfg.T40.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%command%", $"{Send.AntiMD(ev.Message)}"));
 		}
 		public void Upgrade(UpgradeEvent ev)
