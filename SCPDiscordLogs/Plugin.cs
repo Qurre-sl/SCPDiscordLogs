@@ -9,8 +9,8 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new Version(1, 2, 9);
-        public override Version NeededQurreVersion => new Version(1, 8, 13);
+        public override Version Version => new Version(1, 2, 10);
+        public override Version NeededQurreVersion => new Version(1, 9, 0);
         public override int Priority => -100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
@@ -28,9 +28,9 @@ namespace SCPDiscordLogs
                 new Thread(() => ThreadSendMsg()).Start();
                 FirstEnable = false;
             }
-            Events.Round.WaitingForPlayers += Cfg.LoadReloadCfg;
+            Events.Round.Waiting += Cfg.LoadReloadCfg;
             EventHandlers = new EventHandlers();
-            Events.Map.LCZDecon += EventHandlers.Decon;
+            Events.Map.LczDecon += EventHandlers.Decon;
             Events.Scp079.GeneratorActivate += EventHandlers.GeneratorActivate;
             Events.Alpha.Starting += EventHandlers.AlphaStart;
             Events.Alpha.Stopping += EventHandlers.AlphaStop;
@@ -38,20 +38,20 @@ namespace SCPDiscordLogs
             Events.Scp914.Upgrade += EventHandlers.Upgrade;
 
             Events.Server.SendingRA += EventHandlers.SendingRA;
-            Events.Round.WaitingForPlayers += EventHandlers.Waiting;
+            Events.Round.Waiting += EventHandlers.Waiting;
             Events.Server.SendingConsole += EventHandlers.SendingConsole;
             Events.Round.Start += EventHandlers.RoundStart;
             Events.Round.End += EventHandlers.RoundEnd;
             Events.Round.TeamRespawn += EventHandlers.TeamRespawn;
-            Events.Server.Report.Cheater += EventHandlers.ReportCheater;
+            Events.Report.Cheater += EventHandlers.ReportCheater;
 
             Events.Player.ItemUsed += EventHandlers.ItemUsed;
             Events.Player.PickupItem += EventHandlers.Pickup;
             Events.Player.InteractGenerator += EventHandlers.InteractGenerator;
             Events.Scp079.GetLVL += EventHandlers.GetLVL;
             Events.Scp079.GetEXP += EventHandlers.GetEXP;
-            Events.Scp106.PocketDimensionEscape += EventHandlers.PocketDimensionEscape;
-            Events.Scp106.PocketDimensionEnter += EventHandlers.PocketDimensionEnter;
+            Events.Scp106.PocketEscape += EventHandlers.PocketEscape;
+            Events.Scp106.PocketEnter += EventHandlers.PocketEnter;
             Events.Scp106.PortalCreate += EventHandlers.PortalCreate;
             Events.Alpha.EnablePanel += EventHandlers.EnableAlphaPanel;
             Events.Player.TeslaTrigger += EventHandlers.TeslaTrigger;
@@ -85,9 +85,9 @@ namespace SCPDiscordLogs
         }
         public void UnregisterEvents()
         {
-            Events.Round.WaitingForPlayers -= Cfg.LoadReloadCfg;
+            Events.Round.Waiting -= Cfg.LoadReloadCfg;
 
-            Events.Map.LCZDecon -= EventHandlers.Decon;
+            Events.Map.LczDecon -= EventHandlers.Decon;
             Events.Scp079.GeneratorActivate -= EventHandlers.GeneratorActivate;
             Events.Alpha.Starting -= EventHandlers.AlphaStart;
             Events.Alpha.Stopping -= EventHandlers.AlphaStop;
@@ -95,20 +95,20 @@ namespace SCPDiscordLogs
             Events.Scp914.Upgrade -= EventHandlers.Upgrade;
 
             Events.Server.SendingRA -= EventHandlers.SendingRA;
-            Events.Round.WaitingForPlayers -= EventHandlers.Waiting;
+            Events.Round.Waiting -= EventHandlers.Waiting;
             Events.Server.SendingConsole -= EventHandlers.SendingConsole;
             Events.Round.Start -= EventHandlers.RoundStart;
             Events.Round.End -= EventHandlers.RoundEnd;
             Events.Round.TeamRespawn -= EventHandlers.TeamRespawn;
-            Events.Server.Report.Cheater -= EventHandlers.ReportCheater;
+            Events.Report.Cheater -= EventHandlers.ReportCheater;
 
             Events.Player.ItemUsed -= EventHandlers.ItemUsed;
             Events.Player.PickupItem -= EventHandlers.Pickup;
             Events.Player.InteractGenerator -= EventHandlers.InteractGenerator;
             Events.Scp079.GetLVL -= EventHandlers.GetLVL;
             Events.Scp079.GetEXP -= EventHandlers.GetEXP;
-            Events.Scp106.PocketDimensionEscape -= EventHandlers.PocketDimensionEscape;
-            Events.Scp106.PocketDimensionEnter -= EventHandlers.PocketDimensionEnter;
+            Events.Scp106.PocketEscape -= EventHandlers.PocketEscape;
+            Events.Scp106.PocketEnter -= EventHandlers.PocketEnter;
             Events.Scp106.PortalCreate -= EventHandlers.PortalCreate;
             Events.Alpha.EnablePanel -= EventHandlers.EnableAlphaPanel;
             Events.Player.TeslaTrigger -= EventHandlers.TeslaTrigger;

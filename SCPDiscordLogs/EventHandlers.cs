@@ -59,11 +59,11 @@ namespace SCPDiscordLogs
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T17.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%setting%", $"{ev.Setting}"));
 		}
-		public void PocketDimensionEnter(PocketDimensionEnterEvent ev)
+		public void PocketEnter(PocketEnterEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T18.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void PocketDimensionEscape(PocketDimensionEscapeEvent ev)
+		public void PocketEscape(PocketEscapeEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T19.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
@@ -95,7 +95,7 @@ namespace SCPDiscordLogs
 		{
 			if (ev.Allowed) try { Send.Msg(Cfg.T27.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%group%", $"{ev.NewGroup.BadgeText} ({ev.NewGroup.BadgeColor})")); } catch { }
 		}
-		public void Decon(LCZDeconEvent ev)
+		public void Decon(LczDeconEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T28);
 		}
