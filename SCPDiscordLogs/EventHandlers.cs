@@ -10,150 +10,150 @@ namespace SCPDiscordLogs
 {
 	public class EventHandlers
 	{
-		public EventHandlers() => Log.Debug("[SCPDiscordLogs.EventHandlers] successfully initialized");
-		public void Waiting() => Send.Msg(Cfg.T1);
-		public void RoundStart() => Send.Msg(Cfg.T2.Replace("%players%", $"{Player.List.Count()}"));
-		public void RoundEnd(RoundEndEvent _) => Send.Msg(Cfg.T3.Replace("%players%", $"{Player.List.Count()}"));
-		public void Drop(DropItemEvent ev) => Send.Msg(Cfg.T5.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
-		public void Detonation() => Send.Msg(Cfg.T6);
-		public void GeneratorActivate(GeneratorActivateEvent ev) => Send.Msg(Cfg.T7);
-		public void Banned(BannedEvent ev) =>Send.Msg(Cfg.T8.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
+		internal EventHandlers() => Log.Debug("[SCPDiscordLogs.EventHandlers] successfully initialized");
+		internal void Waiting() => Send.Msg(Cfg.T1);
+		internal void RoundStart() => Send.Msg(Cfg.T2.Replace("%players%", $"{Player.List.Count()}"));
+		internal void RoundEnd(RoundEndEvent _) => Send.Msg(Cfg.T3.Replace("%players%", $"{Player.List.Count()}"));
+		internal void Drop(DropItemEvent ev) => Send.Msg(Cfg.T5.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
+		internal void Detonation() => Send.Msg(Cfg.T6);
+		internal void GeneratorActivate(GeneratorActivateEvent ev) => Send.Msg(Cfg.T7);
+		internal void Banned(BannedEvent ev) =>Send.Msg(Cfg.T8.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
 			.Replace("%issuer%", ev.Details.Issuer).Replace("%reason%", ev.Details.Reason).Replace("%time%", $"{new DateTime(ev.Details.Expires):dd.MM.yyyy HH:mm}"));
-		public void ItemChange(ItemChangeEvent ev)
+		internal void ItemChange(ItemChangeEvent ev)
 		{
 			try { Send.Msg(Cfg.T4.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%olditem%", $"{ev.OldItem.Type}").Replace("%newitem%", $"{ev.NewItem.Type}")); } catch { }
 		}
-		public void ReportCheater(ReportCheaterEvent ev)
+		internal void ReportCheater(ReportCheaterEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T9.Replace("%sender%", Api.PlayerInfo(ev.Sender, false)).Replace("%target%", Api.PlayerInfo(ev.Target, false)).Replace("%reason%", ev.Reason));
 		}
-		public void PortalCreate(PortalCreateEvent ev)
+		internal void PortalCreate(PortalCreateEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T10.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 		}
-		public void GetEXP(GetEXPEvent ev)
+		internal void GetEXP(GetEXPEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T11.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%exp%", $"{ev.Amount}").Replace("%type%", $"{ev.Type}"));
 		}
-		public void GetLVL(GetLVLEvent ev)
+		internal void GetLVL(GetLVLEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T12.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%lvl%", $"{ev.NewLevel}"));
 		}
-		public void RechargeWeapon(RechargeWeaponEvent ev)
+		internal void RechargeWeapon(RechargeWeaponEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T13.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%weapon%", $"{ev.Player.CurrentItem.TypeId}"));
 		}
-		public void InteractLocker(InteractLockerEvent ev)
+		internal void InteractLocker(InteractLockerEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T14.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void TeslaTrigger(TeslaTriggerEvent ev)
+		internal void TeslaTrigger(TeslaTriggerEvent ev)
 		{
 			if (ev.Triggerable) Send.Msg(Cfg.T15.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void Activating(ActivatingEvent ev)
+		internal void Activating(ActivatingEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T16.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%state%", $"{Qurre.API.Controllers.Scp914.KnobState}"));
 		}
-		public void KnobChange(KnobChangeEvent ev)
+		internal void KnobChange(KnobChangeEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T17.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%setting%", $"{ev.Setting}"));
 		}
-		public void PocketEnter(PocketEnterEvent ev)
+		internal void PocketEnter(PocketEnterEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T18.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void PocketEscape(PocketEscapeEvent ev)
+		internal void PocketEscape(PocketEscapeEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T19.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void PortalUsing(PortalUsingEvent ev)
+		internal void PortalUsing(PortalUsingEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T20.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 		}
-		public void Femur(FemurBreakerEnterEvent ev)
+		internal void Femur(FemurBreakerEnterEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T21.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void Join(JoinEvent ev)
+		internal void Join(JoinEvent ev)
 		{
 			if (ev.Player.Nickname != "Dedicated Server") Send.Msg(Cfg.T22.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 		}
-		public void UnCuff(UnCuffEvent ev)
+		internal void UnCuff(UnCuffEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T23.Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%uncuffer%", Api.PlayerInfo(ev.Cuffer)));
 		}
-		public void Cuff(CuffEvent ev)
+		internal void Cuff(CuffEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T24.Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%cuffer%", Api.PlayerInfo(ev.Cuffer)));
 		}
-		public void Pickup(PickupItemEvent ev)
+		internal void Pickup(PickupItemEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T26.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Pickup.Type}"));
 		}
-		public void GroupChange(GroupChangeEvent ev)
+		internal void GroupChange(GroupChangeEvent ev)
 		{
 			if (ev.Allowed) try { Send.Msg(Cfg.T27.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%group%", $"{ev.NewGroup.BadgeText} ({ev.NewGroup.BadgeColor})")); } catch { }
 		}
-		public void Decon(LczDeconEvent ev)
+		internal void Decon(LczDeconEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T28);
 		}
-		public void AlphaStart(AlphaStartEvent ev)
+		internal void AlphaStart(AlphaStartEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T29.Replace("%time%", $"{Alpha.AlphaWarheadController.NetworktimeToDetonation}"));
 		}
-		public void AlphaStop(AlphaStopEvent ev)
+		internal void AlphaStop(AlphaStopEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T30.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void EnableAlphaPanel(EnableAlphaPanelEvent ev)
+		internal void EnableAlphaPanel(EnableAlphaPanelEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T31.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void InteractLift(InteractLiftEvent ev)
+		internal void InteractLift(InteractLiftEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T32.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void Contain(ContainEvent ev)
+		internal void Contain(ContainEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T33.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void TeamRespawn(TeamRespawnEvent ev)
+		internal void TeamRespawn(TeamRespawnEvent ev)
 		{
 			string msg = ev.NextKnownTeam == SpawnableTeamType.ChaosInsurgency ? $":spy: Chaos Insurgency" : $":cop: Nine-Tailed Fox";
 			Send.Msg(Cfg.T34.Replace("%team%", msg).Replace("%players%", $"{ev.Players.Count}"));
 		}
-		public void Leave(LeaveEvent ev)
+		internal void Leave(LeaveEvent ev)
 		{
 			Send.Msg(Cfg.T35.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 			Send.PlayersInfo();
 		}
-		public void ThrowItem(ThrowItemEvent ev)
+		internal void ThrowItem(ThrowItemEvent ev)
 		{
 			if (ev.Player == null) return;
 			if (ev.Allowed) Send.Msg(Cfg.T36.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		public void ItemUsed(ItemUsedEvent ev)
+		internal void ItemUsed(ItemUsedEvent ev)
 		{
 			if (ev.Player == null) return;
 			Send.Msg(Cfg.T37.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item}"));
 		}
-		public void RoleChange(RoleChangeEvent ev)
+		internal void RoleChange(RoleChangeEvent ev)
 		{
 			if (ev.Player == null) return;
 			Send.Msg(Cfg.T39.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%role%", $"{ev.NewRole}"));
 		}
-		public void Escape(EscapeEvent ev)
+		internal void Escape(EscapeEvent ev)
         {
 			Send.Msg(Cfg.T38.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%role%", $"{ev.NewRole}"));
 		}
-		public void SendingConsole(SendingConsoleEvent ev)
+		internal void SendingConsole(SendingConsoleEvent ev)
 		{
 			if (ev.Player == null || ev.Player == Server.Host) return;
 			Send.Msg(Cfg.T40.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%command%", $"{Send.AntiMD(ev.Message)}"));
 		}
-		public void Upgrade(UpgradeEvent ev)
+		internal void Upgrade(UpgradeEvent ev)
 		{
 			string players = "";
 			foreach (Player player in ev.Players) players += $"\n{Api.PlayerInfo(player)}";
@@ -161,17 +161,17 @@ namespace SCPDiscordLogs
 			foreach (var item in ev.Items) items += $"\n{item.Info.ItemId}";
 			Send.Msg(Cfg.T41.Replace("%players%", players).Replace("%items%", items));
 		}
-		public void Damage(DamageEvent ev)
+		internal void Damage(DamageEvent ev)
 		{
 			if (ev.Allowed)
 			{
 				if (ev.Attacker.Id == ev.Target.Id) return;
-				if (ev.Attacker != null && ev.Target.Team == ev.Attacker.Team && ev.Target != ev.Attacker)
+				if (ev.Attacker != null && Ally(ev.Attacker, ev.Target) && ev.Target != ev.Attacker)
 					Send.Msg(Cfg.T42.Replace("%tool%", $"{ev.DamageType.Name}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
 				else Send.Msg(Cfg.T43.Replace("%tool%", $"{ev.DamageType.Name}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", $"{ev.HitInformations.Attacker}").Replace("%target%", Api.PlayerInfo(ev.Target)));
 			}
 		}
-		public void InteractGenerator(InteractGeneratorEvent ev)
+		internal void InteractGenerator(InteractGeneratorEvent ev)
 		{
 			if (ev.Allowed)
 			{
@@ -182,7 +182,7 @@ namespace SCPDiscordLogs
 				else if (ev.Status == GeneratorStatus.Disabled) Send.Msg(Cfg.T48.Replace("%player%", Api.PlayerInfo(ev.Player)));
 			}
 		}
-		public void InteractDoor(InteractDoorEvent ev)
+		internal void InteractDoor(InteractDoorEvent ev)
 		{
 			try
 			{
@@ -195,13 +195,13 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		public void Dead(DiesEvent ev)
+		internal void Dead(DiesEvent ev)
 		{
 			try
 			{
 				if (!ev.Allowed) return;
 				if (ev.Killer.Id == ev.Target.Id) return;
-				if (ev.Killer != null && ev.Target.Team == ev.Killer.Team)
+				if (ev.Killer != null && Ally(ev.Killer, ev.Target))
 				{
 					Send.TeamKill(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", ev.HitInfo.Tool.Name));
 					Send.Msg(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", ev.HitInfo.Tool.Name));
@@ -210,7 +210,15 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		public static void UpdateServerStatus()
+		internal bool Ally(Player pl, Player target)
+		{
+			if (target.Team == pl.Team) return true;
+			if (target.Team == Team.SCP && pl.Team == Team.SCP) return true;
+			if ((target.Team == Team.MTF || target.Team == Team.RSC) && (pl.Team == Team.MTF || pl.Team == Team.RSC)) return true;
+			if ((target.Team == Team.CHI || target.Team == Team.CDP) && (pl.Team == Team.CHI || pl.Team == Team.CDP)) return true;
+			return false;
+		}
+		internal static void UpdateServerStatus()
 		{
 			try
 			{
@@ -226,7 +234,7 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		public void SendingRA(SendingRAEvent ev)
+		internal void SendingRA(SendingRAEvent ev)
 		{
 			try
 			{
@@ -330,7 +338,7 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		public void Ban(BanEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), DateTime.Now.AddSeconds(ev.Duration).ToString("dd.MM.yyyy HH:mm"));
-		public void Kick(KickEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), "kick");
+		internal void Ban(BanEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), DateTime.Now.AddSeconds(ev.Duration).ToString("dd.MM.yyyy HH:mm"));
+		internal void Kick(KickEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), "kick");
 	}
 }
