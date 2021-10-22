@@ -233,7 +233,7 @@ namespace SCPDiscordLogs
                     }
                     catch (Exception e)
                     {
-                        if (Connected()) Log.Error("An error occurred while listening to the connection:\n" + e);
+                        if (Connected() && !$"{e}".Trim().StartsWith("System.Threading.ThreadAbortException")) Log.Error($"An error occurred while listening to the connection:\n{e}");
                     }
                 }
                 Thread.Sleep(1000);

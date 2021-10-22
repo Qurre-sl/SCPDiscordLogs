@@ -130,7 +130,7 @@
 			Cfg.T27 = Plugin.Config.GetString("logs_group_change", "%player% has changed his role to: **%group%**.");
 			Cfg.T28 = Plugin.Config.GetString("logs_lcz_decon", ":biohazard: **Light Containment zone decontamination sequence has been started**");
 			Cfg.T34 = Plugin.Config.GetString("logs_team_spawn", "%team% team arrived with number of %players% units.");
-			Cfg.T36 = Plugin.Config.GetString("logs_grenade_throw", ":bomb: %player% threw a grenade.");
+			Cfg.T36 = Plugin.Config.GetString("logs_item_throw", "%player% threw the %item%.");
 			Cfg.T37 = Plugin.Config.GetString("logs_medical_use", ":medical_symbol: %player% used %item%.");
 			Cfg.T38 = Plugin.Config.GetString("logs_escape", "%player% has escaped, his new role is: %role%.");
 			Cfg.T39 = Plugin.Config.GetString("logs_spawn", "%player% spawned as %role%.");

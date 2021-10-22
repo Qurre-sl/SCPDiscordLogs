@@ -8,7 +8,7 @@ using Qurre.API.Objects;
 using Qurre.API.Controllers;
 namespace SCPDiscordLogs
 {
-	public class EventHandlers
+	internal class EventHandlers
 	{
 		internal EventHandlers() => Log.Debug("[SCPDiscordLogs.EventHandlers] successfully initialized");
 		internal void Waiting() => Send.Msg(Cfg.T1);
@@ -16,12 +16,16 @@ namespace SCPDiscordLogs
 		internal void RoundEnd(RoundEndEvent _) => Send.Msg(Cfg.T3.Replace("%players%", $"{Player.List.Count()}"));
 		internal void Drop(DropItemEvent ev) => Send.Msg(Cfg.T5.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
 		internal void Detonation() => Send.Msg(Cfg.T6);
-		internal void GeneratorActivate(GeneratorActivateEvent ev) => Send.Msg(Cfg.T7);
+		internal void GeneratorActivate(GeneratorActivateEvent _) => Send.Msg(Cfg.T7);
 		internal void Banned(BannedEvent ev) =>Send.Msg(Cfg.T8.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
 			.Replace("%issuer%", ev.Details.Issuer).Replace("%reason%", ev.Details.Reason).Replace("%time%", $"{new DateTime(ev.Details.Expires):dd.MM.yyyy HH:mm}"));
 		internal void ItemChange(ItemChangeEvent ev)
 		{
-			try { Send.Msg(Cfg.T4.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%olditem%", $"{ev.OldItem.Type}").Replace("%newitem%", $"{ev.NewItem.Type}")); } catch { }
+			try { Send.Msg(Cfg.T4.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%olditem%", $"{ev.OldItem.Type}").Replace("%newitem%", $"{ev.NewItem.Type}")); } catch { }
+		}
+		internal void ThrowItem(ThrowItemEvent ev)
+		{
+			if (ev.Allowed) Send.Msg(Cfg.T36.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
 		}
 		internal void ReportCheater(ReportCheaterEvent ev)
 		{
@@ -128,11 +132,6 @@ namespace SCPDiscordLogs
 		{
 			Send.Msg(Cfg.T35.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 			Send.PlayersInfo();
-		}
-		internal void ThrowItem(ThrowItemEvent ev)
-		{
-			if (ev.Player == null) return;
-			if (ev.Allowed) Send.Msg(Cfg.T36.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
 		internal void ItemUsed(ItemUsedEvent ev)
 		{

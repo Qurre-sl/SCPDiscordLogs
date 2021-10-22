@@ -97,7 +97,7 @@ logs_cuff: :lock: %target% has been cuffed by %cuffer%
 logs_group_change: %player% has changed his role to: **%group%**.
 logs_lcz_decon: :biohazard: **Light Containment zone decontamination sequence has been started**
 logs_team_spawn: %team% team arrived with number of %players% units.
-logs_grenade_throw: :bomb: %player% threw a grenade.
+logs_item_throw: %player% threw the %item%.
 logs_medical_use: :medical_symbol: %player% used %item%.
 logs_escape: %player% has escaped, his new role is: %role%.
 logs_spawn: %player% spawned as %role%.
@@ -156,7 +156,7 @@ logs_cuff: :lock: %target% был связан %cuffer%
 logs_group_change: %player% получил роль: **%group%**.
 logs_lcz_decon: :biohazard: **Началось обеззараживание легкой зоны**
 logs_team_spawn: Приехал отряд %team% в кол-ве %players% человек.
-logs_grenade_throw: :bomb: %player% бросил гранату.
+logs_item_throw: %player% бросил %item%.
 logs_medical_use: :medical_symbol: %player% использовал %item%.
 logs_escape: %player% сбежал, новая роль: %role%.
 logs_spawn: %player% появился за %role%.
