@@ -17,11 +17,11 @@ namespace SCPDiscordLogs
 		internal void Drop(DropItemEvent ev) => Send.Msg(Cfg.T5.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
 		internal void Detonation() => Send.Msg(Cfg.T6);
 		internal void GeneratorActivate(GeneratorActivateEvent _) => Send.Msg(Cfg.T7);
-		internal void Banned(BannedEvent ev) =>Send.Msg(Cfg.T8.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
+		internal void Banned(BannedEvent ev) => Send.Msg(Cfg.T8.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
 			.Replace("%issuer%", ev.Details.Issuer).Replace("%reason%", ev.Details.Reason).Replace("%time%", $"{new DateTime(ev.Details.Expires):dd.MM.yyyy HH:mm}"));
 		internal void ItemChange(ItemChangeEvent ev)
 		{
-			try { Send.Msg(Cfg.T4.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%olditem%", $"{ev.OldItem.Type}").Replace("%newitem%", $"{ev.NewItem.Type}")); } catch { }
+			try { Send.Msg(Cfg.T4.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%olditem%", $"{(ev.OldItem == null ? "None" : ev.OldItem.Type)}").Replace("%newitem%", $"{(ev.NewItem == null ? "None" : ev.NewItem.Type)}")); } catch { }
 		}
 		internal void ThrowItem(ThrowItemEvent ev)
 		{
@@ -144,7 +144,7 @@ namespace SCPDiscordLogs
 			Send.Msg(Cfg.T39.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%role%", $"{ev.NewRole}"));
 		}
 		internal void Escape(EscapeEvent ev)
-        {
+		{
 			Send.Msg(Cfg.T38.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%role%", $"{ev.NewRole}"));
 		}
 		internal void SendingConsole(SendingConsoleEvent ev)
