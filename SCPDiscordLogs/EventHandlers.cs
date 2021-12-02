@@ -136,7 +136,7 @@ namespace SCPDiscordLogs
 		internal void ItemUsed(ItemUsedEvent ev)
 		{
 			if (ev.Player == null) return;
-			Send.Msg(Cfg.T37.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item}"));
+			Send.Msg(Cfg.T37.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.TypeId}"));
 		}
 		internal void RoleChange(RoleChangeEvent ev)
 		{
@@ -166,8 +166,8 @@ namespace SCPDiscordLogs
 			{
 				if (ev.Attacker.Id == ev.Target.Id) return;
 				if (ev.Attacker != null && Ally(ev.Attacker, ev.Target) && ev.Target != ev.Attacker)
-					Send.Msg(Cfg.T42.Replace("%tool%", $"{ev.DamageType.Name}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
-				else Send.Msg(Cfg.T43.Replace("%tool%", $"{ev.DamageType.Name}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", $"{ev.HitInformations.Attacker}").Replace("%target%", Api.PlayerInfo(ev.Target)));
+					Send.Msg(Cfg.T42.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
+				else Send.Msg(Cfg.T43.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
 			}
 		}
 		internal void InteractGenerator(InteractGeneratorEvent ev)
@@ -202,10 +202,10 @@ namespace SCPDiscordLogs
 				if (ev.Killer.Id == ev.Target.Id) return;
 				if (ev.Killer != null && Ally(ev.Killer, ev.Target))
 				{
-					Send.TeamKill(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", ev.HitInfo.Tool.Name));
-					Send.Msg(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", ev.HitInfo.Tool.Name));
+					Send.TeamKill(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", $"{ev.DamageType}"));
+					Send.Msg(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", $"{ev.DamageType}"));
 				}
-				else Send.Msg(Cfg.T52.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", ev.HitInfo.Tool.Name));
+				else Send.Msg(Cfg.T52.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", $"{ev.DamageType}"));
 			}
 			catch { }
 		}
