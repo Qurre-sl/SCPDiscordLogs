@@ -197,10 +197,10 @@ namespace SCPDiscordLogs
                 socket.Connect(Cfg.Ip, Server.Port);
             }
             catch { }
-            Thread messageThread = new Thread(() => BotListener());
+            Thread messageThread = new(() => BotListener());
             messageThread.Start();
         }
-        private static Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static Socket socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public static bool Connected()
         {
             if (socket == null) return false;
@@ -218,7 +218,7 @@ namespace SCPDiscordLogs
                         byte[] data = new byte[1000];
                         int dataLength = socket.Receive(data);
                         string incomingData = Encoding.UTF8.GetString(data, 0, dataLength);
-                        List<string> messages = new List<string>(incomingData.Split('\n'));
+                        List<string> messages = new(incomingData.Split('\n'));
                         while (messages.Count > 0)
                         {
                             if (messages[0].Length == 0)
