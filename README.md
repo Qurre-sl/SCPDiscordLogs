@@ -41,129 +41,136 @@ logs_avatar: https://cdn.scpsl.store/qurre/qurre_ol.png
 logs_webhook: 
 #bans and kicks will be sent to the webhook if the bot is dead
 logs_webhook_bans_kicks: 
-
-logs_kick: Kick
-logs_ban: Ban
-logs_kick_msg: %kicked% has been kicked by %kicker%. Reason: %reason%
-logs_kick_msg: %banned% has been banned by %banner%. Reason: %reason%\nUntil %to%
 ```
 Translation of logs:
+
+*Located in `~/.config`(`%AppData%` on Windows)`/Qurre/Configs/Custom/SCPDiscordLogs-Translate.yaml`
 ```yaml
 #EN
 #translated by [NPG] nekto™#0021
-logs_waiting: :hourglass: Waiting for players...
-logs_round_info: Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%
-logs_round_start: :arrow_forward: Round started: %players% players online.
-logs_round_end: :stop_button: Round ended: %players% players online.
-logs_item_change: %player% changed the item in hand: %olditem% -> %newitem%.
-logs_item_drop: %player% dropped %item%.
-logs_item_pickup: %player% picked up %item%.
-logs_alpha_detonated: Alpha-warhead has been detonated.
-logs_alpha_active: Alpha-warhead has been activated.
-logs_alpha_not_detonated: Alpha-warhead not detonated.
-logs_alpha_detonation: :radioactive: **The Alpha warhead was successfully detonated**
-logs_alpha_start: :radioactive: **Alpha-warhed has been activated, %time% seconds to detonation.**
-logs_alpha_stop: ***%player% actvivated the Alpha-warhead.***
-logs_alpha_panel: %player% got access to the alpha warhead detonation button cover.
-logs_generator_activate: Generator has been activated.
-logs_generator_inject: %player% insert weapon tablet to generator.
-logs_generator_open: %player% opened generator.
-logs_generator_unlock: %player% unlocked generator.
-logs_generator_close: %player% closed generator.
-logs_generator_ejected: %player% ejected weapon tablet from generator.
-logs_banned: :no_entry: %player% was banned %issuer% for %reason%. Ban expires: %time%
-logs_report_cheater: **Cheater has been reported  by: %sender%. Reported player - %target%. Reason: %reason%.**
-logs_portal_create: %player% Created portal.
-logs_portal_use: %player% Used portal.
-logs_pocket_enter: %player% hit the pocket dimension.
-logs_pocket_escape: %player% escaped from pocket dimension.
-logs_femur_enter: %player% sacrificed himself in SCP 106 cell.
-logs_106_contain: %player% succesfuly recontained SCP 106.
-logs_079_getexp: %player% get %exp% for %type%.
-logs_079_getlvl: %player% get %lvl% SCP 079 level.
-logs_weapon_reload: %player% reloaded weapon: %weapon%.
-logs_interact_locker: %player% оpened locker.
-logs_interact_tesla: %player% trigered tesla gate.
-logs_interact_lift: %player% called elevator.
-logs_interact_door_close: %player% close door: %door%.
-logs_interact_door_open: %player% opened: %door%.
-logs_914_activate: %player% activated SCP 914, on settings: %state%.
-logs_914_change: %player% changed SCP 914 settings to %setting%.
-logs_914_upgrade: SCP 914 upgraded:\nPlayers:%players%.\nItems:%items%.
-logs_join: :arrow_right: **%player% connected to the server.**
-logs_leave: :arrow_left: **%player% left the server.**
-logs_uncuff: :unlock: %target% has been uncuffed by %uncuffer%
-logs_cuff: :lock: %target% has been cuffed by %cuffer%
-logs_group_change: %player% has changed his role to: **%group%**.
-logs_lcz_decon: :biohazard: **Light Containment zone decontamination sequence has been started**
-logs_team_spawn: %team% team arrived with number of %players% units.
-logs_item_throw: %player% threw the %item%.
-logs_medical_use: :medical_symbol: %player% used %item%.
-logs_escape: %player% has escaped, his new role is: %role%.
-logs_spawn: %player% spawned as %role%.
-logs_ra: :keyboard: %player% used command: %command%
-logs_console: %player% used ingame command [`]: %command%
-logs_damage_teamkill: :crossed_swords: **%attacker% damaged teamate %target% for %amount%, using %tool%.**
-logs_damage: %attacker% damaged %target% for %amount%, using %tool%.
-logs_kill_teamkill: :o: **%killer% teamkilled %target% using %tool%.**
-logs_kill: :skull_crossbones: **%killer% killed %target% using %tool%.**
+Name: SCPDiscordLogs-Translate
+Kick: Kick
+Ban: Ban
+KickWebHook: '%kicked% has been kicked by %kicker%. Reason: %reason%'
+BanWebHook: '%banned% has been banned by %banner%. Reason: %reason%\nUntil %to%'
+RoundInfo: 'Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%'
+PickupItem: '%player% picked up %item%.'
+DropItem: '%player% dropped %item%.'
+ChangeItem: '%player% changed the item in hand: %olditem% -> %newitem%.'
+RoundEnd: ':stop_button: Round ended: %players% players online.'
+RoundStart: ':arrow_forward: Round started: %players% players online.'
+Waiting: ':hourglass: Waiting for players...'
+Kill: ':skull_crossbones: **%killer% killed %target% using %tool%.**'
+TeamKill: ':o: **%killer% teamkilled %target% using %tool%.**'
+Damage: '%attacker% damaged %target% for %amount%, using %tool%.'
+TeamDamage: ':crossed_swords: **%attacker% damaged teamate %target% for %amount%, using %tool%.**'
+Console: '%player% used console command [`]: %command%'
+Ra: ':keyboard: %player% used command: %command%'
+Spawn: '%player% spawned as %role%.'
+Escape: '%player% has escaped, his new role is: %role%.'
+UseItem: '%player% used %item%.'
+ThrowItem: '%player% threw the %item%.'
+TeamSpawn: '%team% team arrived with number of %players% units.'
+LczDecon: ':biohazard: **Light Containment zone decontamination sequence has been started**'
+AdminRoleChange: '%player% has changed his role to: **%group%**.'
+Cuff: ':lock: %target% has been cuffed by %cuffer%'
+UnCuff: ':unlock: %target% has been uncuffed by %uncuffer%'
+Leave: ':arrow_left: **%player% leaved from the server.**'
+Join: ':arrow_right: **%player% connected to the server.**'
+Upgrade914: 'SCP 914 upgraded:\nPlayers:%players%.\nItems:%items%.'
+Change914: '%player% changed SCP 914 settings to %setting%.'
+Activate914: '%player% activated SCP 914, on settings: %state%.'
+InteractDoorOpen: '%player% opened door: %door%.'
+InteractDoorClose: '%player% close door: %door%.'
+InteractLift: '%player% called elevator.'
+InteractTesla: '%player% trigered tesla gate.'
+InteractLocker: '%player% оpened locker.'
+WeaponReload: '%player% reloaded weapon: %weapon%.'
+GetLvl079: '%player% get %lvl% SCP 079 level.'
+GetXp079: '%player% get %exp% for %type%.'
+Contain106: '%player% succesfuly recontained SCP 106.'
+FemurEnter: '%player% sacrificed himself in SCP 106 cell.'
+PocketEscape: '%player% escaped from pocket dimension.'
+PocketEnter: '%player% hit the pocket dimension.'
+PortalUse: '%player% used portal.'
+PortalCreate: '%player% created portal.'
+ReportCheater: '**Cheater has been reported  by: %sender%. Reported player - %target%. Reason: %reason%.**'
+Banned: ':no_entry: %player% was banned %issuer% for %reason%. Until: %time%'
+GeneratorEjected: '%player% ejected weapon tablet from generator.'
+GeneratorClose: '%player% closed generator.'
+GeneratorUnlock: '%player% unlocked generator.'
+GeneratorOpen: '%player% opened generator.'
+GeneratorInject: '%player% insert weapon tablet to generator.'
+GeneratorActivate: Generator has been activated
+AlphaPanel: '%player% got access to the alpha warhead detonation button cover.'
+AlphaStop: '***%player% actvivated the Alpha-warhead.***'
+AlphaStart: ':radioactive: **Alpha-warhed has been activated, %time% seconds to detonation.**'
+AlphaDetonation: ':radioactive: **The Alpha warhead was successfully detonated**'
+AlphaNotDetonated: Alpha-warhead not detonated.
+AlphaActive: Alpha-warhead has been activated.
+AlphaDetonated: Alpha-warhead has been detonated.
 ```
 ```yaml
 #RU
-logs_waiting: :hourglass: Ожидание игроков...
-logs_round_info: Игроков онлайн: %players%. Длительность раунда: %time% минут. Живых людей: %alive%. Живых scp: %scps%. %alpha% IP: %ip%
-logs_round_start: :arrow_forward: Раунд запущен: %players% игроков на сервере.
-logs_round_end: :stop_button: Раунд закончен: %players% игроков онлайн.
-logs_item_change: %player% поменял предмет в руке: %olditem% -> %newitem%.
-logs_item_drop: %player% дропнул %item%.
-logs_item_pickup: %player% подобрал %item%.
-logs_alpha_detonated: Альфа-Боеголовка взорвана.
-logs_alpha_active: Альфа-Боеголовка запущена.
-logs_alpha_not_detonated: Альфа-Боеголовка не взорвана.
-logs_alpha_detonation: :radioactive: **Альфа-боеголовка успешно взорвана**
-logs_alpha_start: :radioactive: **Альфа-Боеголовка взорвется через %time% секунд.**
-logs_alpha_stop: ***%player% выключил Альфа-Боеголовку.***
-logs_alpha_panel: %player% получил доступ к крышке кнопки детонации альфа-боеголовки.
-logs_generator_activate: Активировался генератор
-logs_generator_inject: %player% вставил планшет в генератор.
-logs_generator_open: %player% открыл генератор.
-logs_generator_unlock: %player% разблокировал дверь генератора.
-logs_generator_close: %player% закрыл генератор.
-logs_generator_ejected: %player% достал планшет из генератора.
-logs_banned: :no_entry: %player% забанен %issuer% за %reason%. До %time%
-logs_report_cheater: **Отправлен репорт на читера: %sender%. Зарепорчен - %target%. Причина: %reason%.**
-logs_portal_create: %player% создал портал.
-logs_portal_use: %player% использовал портал.
-logs_pocket_enter: %player% попал в карманное измерение.
-logs_pocket_escape: %player% сбежал из карманного измерения.
-logs_femur_enter: %player% пожертвовал собой в камере SCP 106.
-logs_106_contain: %player% успешно восстановил условия содержания SCP 106.
-logs_079_getexp: %player% получил %exp% опыта за %type%.
-logs_079_getlvl: %player% получил %lvl% уровень 079.
-logs_weapon_reload: %player% перезарядил оружие: %weapon%.
-logs_interact_locker: %player% открыл шкафчик.
-logs_interact_tesla: %player% заагрил теслу.
-logs_interact_lift: %player% вызвал лифт.
-logs_interact_door_close: %player% закрыл дверь: %door%.
-logs_interact_door_open: %player% открыл дверь: %door%.
-logs_914_activate: %player% активировал SCP 914, настройки: %state%.
-logs_914_change: %player% изменил настройки SCP 914 на %setting%.
-logs_914_upgrade: SCP 914 улучшил:\nИгроков:%players%.\nПредметы:%items%.
-logs_join: :arrow_right: **%player% присоединился к игре.**
-logs_leave: :arrow_left: **%player% ливнул с сервера.**
-logs_uncuff: :unlock: %target% был освобожден %uncuffer%
-logs_cuff: :lock: %target% был связан %cuffer%
-logs_group_change: %player% получил роль: **%group%**.
-logs_lcz_decon: :biohazard: **Началось обеззараживание легкой зоны**
-logs_team_spawn: Приехал отряд %team% в кол-ве %players% человек.
-logs_item_throw: %player% бросил %item%.
-logs_medical_use: :medical_symbol: %player% использовал %item%.
-logs_escape: %player% сбежал, новая роль: %role%.
-logs_spawn: %player% появился за %role%.
-logs_ra: :keyboard: %player% использовал команду: %command%
-logs_console: %player% использовал команду на [ё]: %command%
-logs_damage_teamkill: :crossed_swords: **%attacker% нанес %amount% урона %target% с %tool%.**
-logs_damage: %attacker% нанес %amount% урона %target% с %tool%.
-logs_kill_teamkill: :o: **%killer% убил %target% с %tool%.**
-logs_kill: :skull_crossbones: **%killer% убил %target% с %tool%.**
+Name: SCPDiscordLogs-Translate
+Kick: Кик
+Ban: Бан
+KickWebHook: 'Кикнут: %kicked%\nКикнул: %kicker%\nПричина: %reason%'
+BanWebHook: 'Забанен: %banned%\nЗабанил: %banner%\nПричина: %reason%\nДо %to%'
+RoundInfo: 'Игроков онлайн: %players%. Длительность раунда: %time% минут. Живых людей: %alive%. Живых scp: %scps%. %alpha% IP: %ip%'
+PickupItem: '%player% подобрал %item%.'
+DropItem: '%player% дропнул %item%.'
+ChangeItem: '%player% поменял предмет в руке: %olditem% -> %newitem%.'
+RoundEnd: ':stop_button: Раунд закончен: %players% игроков онлайн.'
+RoundStart: ':arrow_forward: Раунд запущен: %players% игроков на сервере.'
+Waiting: ':hourglass: Ожидание игроков...'
+Kill: ':skull_crossbones: **%killer% убил %target% с %tool%.**'
+TeamKill: ':o: **%killer% убил %target% с %tool%.**'
+Damage: '%attacker% нанес %amount% урона %target% с %tool%.'
+TeamDamage: ':crossed_swords: **%attacker% нанес %amount% урона %target% с %tool%.**'
+Console: '%player% использовал команду на [ё]: %command%'
+Ra: ':keyboard: %player% использовал команду: %command%'
+Spawn: '%player% появился за %role%.'
+Escape: '%player% сбежал, новая роль: %role%.'
+UseItem: '%player% использовал %item%.'
+ThrowItem: '%player% бросил %item%.'
+TeamSpawn: 'Приехал отряд %team% в кол-ве %players% человек.'
+LczDecon: ':biohazard: **Началось обеззараживание легкой зоны**'
+AdminRoleChange: '%player% получил роль: **%group%**.'
+Cuff: ':lock: %target% был связан %cuffer%'
+UnCuff: ':unlock: %target% был освобожден %uncuffer%'
+Leave: ':arrow_left: **%player% ливнул с сервера.**'
+Join: ':arrow_right: **%player% присоединился к игре.**'
+Upgrade914: 'SCP 914 улучшил:\nИгроков:%players%.\nПредметы:%items%.'
+Change914: '%player% изменил настройки SCP 914 на %setting%.'
+Activate914: '%player% активировал SCP 914, настройки: %state%.'
+InteractDoorOpen: '%player% открыл дверь: %door%.'
+InteractDoorClose: '%player% закрыл дверь: %door%.'
+InteractLift: '%player% вызвал лифт.'
+InteractTesla: '%player% заагрил теслу.'
+InteractLocker: '%player% открыл шкафчик.'
+WeaponReload: '%player% перезарядил оружие: %weapon%.'
+GetLvl079: '%player% получил %lvl% уровень 079.'
+GetXp079: '%player% получил %exp% опыта за %type%.'
+Contain106: '%player% успешно восстановил условия содержания SCP 106.'
+FemurEnter: '%player% пожертвовал собой в камере SCP 106.'
+PocketEscape: '%player% сбежал из карманного измерения.'
+PocketEnter: '%player% попал в карманное измерение.'
+PortalUse: '%player% использовал портал.'
+PortalCreate: '%player% создал портал.'
+ReportCheater: '**Отправлен репорт на читера: %sender%. Зарепорчен - %target%. Причина: %reason%.**'
+Banned: ':no_entry: %player% забанен %issuer% за %reason%. До %time%'
+GeneratorEjected: '%player% достал планшет из генератора.'
+GeneratorClose: '%player% закрыл генератор.'
+GeneratorUnlock: '%player% разблокировал дверь генератора.'
+GeneratorOpen: '%player% открыл генератор.'
+GeneratorInject: '%player% вставил планшет в генератор.'
+GeneratorActivate: Активировался генератор
+AlphaPanel: '%player% получил доступ к крышке кнопки детонации альфа-боеголовки.'
+AlphaStop: '***%player% выключил Альфа-Боеголовку.***'
+AlphaStart: ':radioactive: **Альфа-Боеголовка взорвется через %time% секунд.**'
+AlphaDetonation: ':radioactive: **Альфа-боеголовка успешно взорвана**'
+AlphaNotDetonated: Альфа-Боеголовка не взорвана.
+AlphaActive: Альфа-Боеголовка запущена.
+AlphaDetonated: Альфа-Боеголовка взорвана.
 ```
