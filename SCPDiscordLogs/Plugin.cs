@@ -9,18 +9,21 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new(1, 2, 15);
-        public override Version NeededQurreVersion => new(1, 10, 4);
+        public override Version Version => new(1, 2, 16);
+        public override Version NeededQurreVersion => new(1, 11, 1);
         public override int Priority => -100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
         public int MaxPlayers = ConfigFile.ServerConfig.GetInt("max_players", 100);
         private EventHandlers EventHandlers;
         private bool FirstEnable = true;
+        internal static Translate Translate;
         #endregion
         #region Events
         public void RegisterEvents()
         {
+            Translate = new();
+            CustomConfigs.Add(Translate);
             Cfg.LoadReloadCfg();
             if (FirstEnable)
             {
@@ -85,6 +88,7 @@ namespace SCPDiscordLogs
         }
         public void UnregisterEvents()
         {
+            CustomConfigs.Clear();
             Events.Round.Waiting -= Cfg.LoadReloadCfg;
 
             Events.Map.LczDecon -= EventHandlers.Decon;
