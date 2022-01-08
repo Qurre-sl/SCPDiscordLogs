@@ -9,7 +9,7 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new(1, 2, 16);
+        public override Version Version => new(1, 2, 17);
         public override Version NeededQurreVersion => new(1, 11, 1);
         public override int Priority => -100000;
         public override void Enable() => RegisterEvents();
@@ -60,7 +60,8 @@ namespace SCPDiscordLogs
             Events.Player.TeslaTrigger += EventHandlers.TeslaTrigger;
             Events.Player.ThrowItem += EventHandlers.ThrowItem;
             Events.Player.Damage += EventHandlers.Damage;
-            Events.Player.Dies += EventHandlers.Dead;
+            Events.Player.Dies += EventHandlers.Dies;
+            Events.Player.Dead += EventHandlers.Dead;
             Events.Player.Banned += EventHandlers.Banned;
             Events.Player.InteractDoor += EventHandlers.InteractDoor;
             Events.Player.InteractLift += EventHandlers.InteractLift;
@@ -118,7 +119,8 @@ namespace SCPDiscordLogs
             Events.Player.TeslaTrigger -= EventHandlers.TeslaTrigger;
             Events.Player.ThrowItem -= EventHandlers.ThrowItem;
             Events.Player.Damage -= EventHandlers.Damage;
-            Events.Player.Dies -= EventHandlers.Dead;
+            Events.Player.Dies -= EventHandlers.Dies;
+            Events.Player.Dead -= EventHandlers.Dead;
             Events.Player.Banned -= EventHandlers.Banned;
             Events.Player.InteractDoor -= EventHandlers.InteractDoor;
             Events.Player.InteractLift -= EventHandlers.InteractLift;

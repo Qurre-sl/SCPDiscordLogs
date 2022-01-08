@@ -14,7 +14,12 @@ namespace SCPDiscordLogs
                     .Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
                 try
                 {
-                    if (role) return $"{nick} - {pl.UserId} ({pl.Role})";
+                    if (role)
+                    {
+                        var _role = pl.Role;
+                        if ((_role == RoleType.Spectator || _role == RoleType.None) && EventHandlers.Cached.TryGetValue(pl, out var __role)) _role = __role;
+                        return $"{nick} - {pl.UserId} ({_role})";
+                    }
                     else return $"{nick} - {pl.UserId}";
                 }
                 catch

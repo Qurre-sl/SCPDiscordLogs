@@ -6,6 +6,7 @@ using Qurre.API;
 using Qurre.API.Events;
 using Qurre.API.Objects;
 using Qurre.API.Controllers;
+using System.Collections.Generic;
 namespace SCPDiscordLogs
 {
 	internal class EventHandlers
@@ -194,11 +195,16 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		internal void Dead(DiesEvent ev)
+		internal static Dictionary<Player, RoleType> Cached = new();
+		internal void Dies(DiesEvent ev)
+		{
+			if (Cached.ContainsKey(ev.Target)) Cached.Remove(ev.Target);
+			Cached.Add(ev.Target, ev.Target.Role);
+		}
+		internal void Dead(DeadEvent ev)
 		{
 			try
 			{
-				if (!ev.Allowed) return;
 				if (ev.Killer.Id == ev.Target.Id) return;
 				if (ev.Killer != null && Ally(ev.Killer, ev.Target))
 				{
@@ -211,10 +217,12 @@ namespace SCPDiscordLogs
 		}
 		internal bool Ally(Player pl, Player target)
 		{
-			if (target.Team == pl.Team) return true;
-			if (target.Team == Team.SCP && pl.Team == Team.SCP) return true;
-			if ((target.Team == Team.MTF || target.Team == Team.RSC) && (pl.Team == Team.MTF || pl.Team == Team.RSC)) return true;
-			if ((target.Team == Team.CHI || target.Team == Team.CDP) && (pl.Team == Team.CHI || pl.Team == Team.CDP)) return true;
+			var targetTeam = target.Team;
+			if (Cached.TryGetValue(target, out var role)) targetTeam = role.GetTeam();
+			if (targetTeam == pl.Team) return true;
+			if (targetTeam == Team.SCP && pl.Team == Team.SCP) return true;
+			if ((targetTeam == Team.MTF || targetTeam == Team.RSC) && (pl.Team == Team.MTF || pl.Team == Team.RSC)) return true;
+			if ((targetTeam == Team.CHI || targetTeam == Team.CDP) && (pl.Team == Team.CHI || pl.Team == Team.CDP)) return true;
 			return false;
 		}
 		internal static void UpdateServerStatus()
