@@ -3,7 +3,7 @@ namespace SCPDiscordLogs
 {
     public static class Api
     {
-        public static bool Connected => Send.Connected();
+        public static bool Connected => Send.Client.Connected;
         public static bool BlockInRaLogs(string UserID) => Send.BlockInRaLogs(UserID);
         public static string PlayerInfo(Player pl, bool role = true)
         {

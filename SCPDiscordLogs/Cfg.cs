@@ -4,6 +4,7 @@ namespace SCPDiscordLogs
 	public static class Cfg
 	{
 		public static string Ip { get; private set; }
+		public static ushort Port { get; private set; }
 		public static string Delimiter { get; private set; }
 		public static string BlockRa { get; private set; }
 		public static string ServerName { get; private set; }
@@ -74,6 +75,7 @@ namespace SCPDiscordLogs
 		{
 			Plugin.Translate.Reload();
 			Cfg.Ip = Plugin.Config.GetString("logs_ip", "localhost", "ip specified in a bot config");
+			Cfg.Port = Plugin.Config.GetUShort("logs_port", Server.Port, "port specified in a bot config");
 			Cfg.Delimiter = Plugin.Config.GetString("logs_delimiter", "^", "delimiter between id and nickname in ra");
 			Cfg.BlockRa = Plugin.Config.GetString("logs_block_ra_logs", "7654@steam, 444@discord,1337@steam", "Those who will not be logged in ra logs");
 			Cfg.ServerName = Plugin.Config.GetString("logs_server_name", "Qurre", "server name");

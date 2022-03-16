@@ -50,7 +50,7 @@ namespace SCPDiscordLogs
 		}
 		internal void InteractLocker(InteractLockerEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T14.Replace("%player%", Api.PlayerInfo(ev.Player)));
+			if (ev.Allowed) Send.Msg(Cfg.T14.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%locker%", ev.Locker.Name));
 		}
 		internal void TeslaTrigger(TeslaTriggerEvent ev)
 		{
@@ -118,11 +118,31 @@ namespace SCPDiscordLogs
 		}
 		internal void InteractLift(InteractLiftEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T32.Replace("%player%", Api.PlayerInfo(ev.Player)));
+			if (ev.Allowed) Send.Msg(Cfg.T32.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%lift%", ev.Lift.Name));
 		}
 		internal void Contain(ContainEvent ev)
 		{
 			if (ev.Allowed) Send.Msg(Cfg.T33.Replace("%player%", Api.PlayerInfo(ev.Player)));
+		}
+		internal void Explosion(FlashExplosionEvent ev)
+		{
+			if (ev.Allowed) Send.Msg(Plugin.Translate.FlashExplosion.Replace("%player%", Api.PlayerInfo(ev.Thrower)));
+		}
+		internal void Explosion(FragExplosionEvent ev)
+		{
+			if (ev.Allowed) Send.Msg(Plugin.Translate.FragExplosion.Replace("%player%", Api.PlayerInfo(ev.Thrower)));
+		}
+		internal void Flash(FlashedEvent ev)
+		{
+			if (ev.Allowed) Send.Msg(Plugin.Translate.Flashed.Replace("%thrower%", Api.PlayerInfo(ev.Thrower)).Replace("%target%", Api.PlayerInfo(ev.Target)));
+		}
+		internal void Scp330(InteractScp330Event ev)
+		{
+			if (ev.Allowed) Send.Msg(Plugin.Translate.Scp330Interact.Replace("%player%", Api.PlayerInfo(ev.Player)));
+		}
+		internal void Scp330(EatingScp330Event ev)
+		{
+			if (ev.Allowed) Send.Msg(Plugin.Translate.Scp330Eat.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%candy%", $"{ev.Candy}"));
 		}
 		internal void TeamRespawn(TeamRespawnEvent ev)
 		{
@@ -153,6 +173,13 @@ namespace SCPDiscordLogs
 			if (ev.Player == null || ev.Player == Server.Host) return;
 			Send.Msg(Cfg.T40.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%command%", $"{Send.AntiMD(ev.Message)}"));
 		}
+		internal void Heal(HealEvent ev)
+		{
+			if (!ev.Allowed) return;
+			double hp = Math.Round(ev.Hp);
+			if (1 >= hp) return;
+			Send.Msg(Plugin.Translate.Heal.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%amout%", $"{hp}"));
+		}
 		internal void Upgrade(UpgradeEvent ev)
 		{
 			string players = "";
@@ -167,8 +194,8 @@ namespace SCPDiscordLogs
 			{
 				if (ev.Attacker.Id == ev.Target.Id) return;
 				if (ev.Attacker != null && Ally(ev.Attacker, ev.Target) && ev.Target != ev.Attacker)
-					Send.Msg(Cfg.T42.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
-				else Send.Msg(Cfg.T43.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{ev.Amount}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
+					Send.Msg(Cfg.T42.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{Math.Round(ev.Amount)}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
+				else Send.Msg(Cfg.T43.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{Math.Round(ev.Amount)}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
 			}
 		}
 		internal void InteractGenerator(InteractGeneratorEvent ev)
@@ -181,6 +208,18 @@ namespace SCPDiscordLogs
 				else if (ev.Status == GeneratorStatus.CloseDoor) Send.Msg(Cfg.T47.Replace("%player%", Api.PlayerInfo(ev.Player)));
 				else if (ev.Status == GeneratorStatus.Disabled) Send.Msg(Cfg.T48.Replace("%player%", Api.PlayerInfo(ev.Player)));
 			}
+		}
+		internal void LczAnnounce(LczAnnounceEvent ev)
+		{
+			if (!ev.Allowed) return;
+			int mins;
+			if (ev.Id == 0) mins = 15;
+			else if (ev.Id == 1) mins = 10;
+			else if (ev.Id == 2) mins = 5;
+			else if (ev.Id == 3) mins = 1;
+			else if (ev.Id == 4) mins = (int)0.5;
+			else return;
+			Send.Msg(Plugin.Translate.LczAnnounce.Replace("%minutes%", $"{mins}"));
 		}
 		internal void InteractDoor(InteractDoorEvent ev)
 		{
@@ -345,7 +384,7 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		internal void Ban(BanEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), DateTime.Now.AddSeconds(ev.Duration).ToString("dd.MM.yyyy HH:mm"));
+		internal void Ban(BannedEvent ev) => Send.BanKick(ev.Details.Reason, Api.PlayerInfo(ev.Player, false), Send.AntiMD(ev.Details.Issuer), new DateTime(ev.Details.Expires).AddHours((DateTime.Now - DateTime.UtcNow).TotalHours).ToString("dd.MM.yyyy HH:mm"));
 		internal void Kick(KickEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), "kick");
 	}
 }

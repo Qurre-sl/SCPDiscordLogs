@@ -35,12 +35,12 @@ namespace SCPDiscordLogs
 		public string Upgrade914 { get; set; } = "SCP 914 upgraded:\nPlayers:%players%.\nItems:%items%.";
 		public string Change914 { get; set; } = "%player% changed SCP 914 settings to %setting%.";
 		public string Activate914 { get; set; } = "%player% activated SCP 914, on settings: %state%.";
-		public string InteractDoorOpen { get; set; } = "%player% opened door: %door%.";
-		public string InteractDoorClose { get; set; } = "%player% close door: %door%.";
-		public string InteractLift { get; set; } = "%player% called elevator.";
+		public string InteractDoorOpen { get; set; } = "%player% opened door: %door%";
+		public string InteractDoorClose { get; set; } = "%player% close door: %door%";
+		public string InteractLift { get; set; } = "%player% called elevator %lift%";
 		public string InteractTesla { get; set; } = "%player% trigered tesla gate.";
-		public string InteractLocker { get; set; } = "%player% оpened locker.";
-		public string WeaponReload { get; set; } = "%player% reloaded weapon: %weapon%.";
+		public string InteractLocker { get; set; } = "%player% оpened locker %locker%";
+		public string WeaponReload { get; set; } = "%player% reloaded weapon: %weapon%";
 		public string GetLvl079 { get; set; } = "%player% get %lvl% SCP 079 level.";
 		public string GetXp079 { get; set; } = "%player% get %exp% for %type%.";
 		public string Contain106 { get; set; } = "%player% succesfuly recontained SCP 106.";
@@ -64,5 +64,12 @@ namespace SCPDiscordLogs
 		public string AlphaNotDetonated { get; set; } = "Alpha-warhead not detonated.";
 		public string AlphaActive { get; set; } = "Alpha-warhead has been activated.";
 		public string AlphaDetonated { get; set; } = "Alpha-warhead has been detonated.";
+		public string LczAnnounce { get; set; } = "**Decontamination of the light zone will begin in %minutes% minutes**";
+		public string Heal { get; set; } = "%player% recovered %amout%HP";
+		public string FlashExplosion { get; set; } = "%player% exploded flash grenade";
+		public string FragExplosion { get; set; } = "%player% exploded frag grenade";
+		public string Flashed { get; set; } = "%target% was blinded by %thrower%";
+		public string Scp330Interact { get; set; } = "%player% picked up SCP-330";
+		public string Scp330Eat { get; set; } = "%player% eat SCP-330 %candy%";
 	}
 }

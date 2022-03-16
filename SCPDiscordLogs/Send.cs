@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using Qurre;
 using Qurre.API;
+using QurreSocket;
 namespace SCPDiscordLogs
 {
     internal class Send
@@ -20,28 +17,26 @@ namespace SCPDiscordLogs
         {
             string _ = Cfg.BlockRa;
             string[] str = _.Split(',');
-            List<string> strl = new List<string>();
+            List<string> strl = new();
             foreach (string st in str) strl.Add(st.Trim());
             return strl;
         }
         #endregion
+        internal static Client Client;
         internal static string msg = "";
         internal static string last_msg = "";
-        private const string statre = "⋠";
         internal static void FatalMsg()
         {
             try
             {
                 if (msg.Length < 1) return;
-                string str = $"msg=;={msg}{statre}";
-                byte[] ba = Encoding.UTF8.GetBytes(str);
+                Client.Emit("msg", new string[] { msg });
                 msg = "";
-                socket.Send(ba);
             }
             catch
             {
                 if (Cfg.WebHook == "") return;
-                Webhook webhk = new Webhook(Cfg.WebHook);
+                Webhook webhk = new(Cfg.WebHook);
                 webhk.Send(msg);
                 msg = "";
             }
@@ -51,63 +46,37 @@ namespace SCPDiscordLogs
             if (msg.Length > 1500) FatalMsg();
             if (last_msg == data) return;
             last_msg = data;
-            msg += $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}";
+            msg += $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}";
             msg += "\n";
         }
         internal static void PlayersInfo()
         {
-            try
-            {
-                int players = Player.List.ToList().Count;
-                string str = $"players=;={players}{statre}";
-                byte[] ba = Encoding.UTF8.GetBytes(str);
-                socket.Send(ba);
-            }
-            catch { }
+            try { Client.Emit("players", new object[] { Player.List.Count() }); } catch { }
         }
         internal static void ChannelTopic(string data)
         {
-            try
-            {
-                string str = $"channelstatus=;={data}{statre}";
-                byte[] ba = Encoding.UTF8.GetBytes(str);
-                socket.Send(ba);
-            }
-            catch { }
+            try { Client.Emit("channelstatus", new string[] { data }); } catch { }
         }
         internal static void RemoteAdmin(string data)
         {
-            if (Round.Started)
+            try { Client.Emit("ra", new string[] { $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}" }); }
+            catch
             {
-                try
-                {
-                    string str = $"ra=;=[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}{statre}";
-                    byte[] ba = Encoding.UTF8.GetBytes(str);
-                    socket.Send(ba);
-                }
-                catch
-                {
-                    if (Cfg.WebHook == "") return;
-                    Webhook webhk = new Webhook(Cfg.WebHook);
-                    webhk.Send($"{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}");
-                }
+                if (Cfg.WebHook == "") return;
+                Webhook webhk = new(Cfg.WebHook);
+                webhk.Send($"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}");
             }
         }
         internal static void TeamKill(string data)
         {
             if (Round.Started)
             {
-                try
-                {
-                    string str = $"tk=;=[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}{statre}";
-                    byte[] ba = Encoding.UTF8.GetBytes(str);
-                    socket.Send(ba);
-                }
+                try { Client.Emit("tk", new string[] { $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}" }); }
                 catch
                 {
                     if (Cfg.WebHook == "") return;
-                    Webhook webhk = new Webhook(Cfg.WebHook);
-                    webhk.Send($"{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}");
+                    Webhook webhk = new(Cfg.WebHook);
+                    webhk.Send($"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}");
                 }
             }
         }
@@ -115,20 +84,17 @@ namespace SCPDiscordLogs
         {
             try
             {
-                string str = "";
-                if (time == "kick") str = $"kick=;={banned}=;={banner}=;={reason}{statre}";
-                else str = $"ban=;={banned}=;={banner}=;={reason}=;={time}{statre}";
-                byte[] ba = Encoding.UTF8.GetBytes(str);
-                socket.Send(ba);
+                if (time == "kick") Client.Emit("kick", new string[] { banned, banner, reason });
+                else Client.Emit("ban", new string[] { banned, banner, reason, time });
             }
             catch
             {
                 if (Cfg.WebHookBans == "") return;
-                Webhook webhk = new Webhook(Cfg.WebHookBans);
-                List<Embed> listEmbed = new List<Embed>();
-                Embed embed = new Embed();
-                var author = new EmbedAuthor();
-                var footer = new EmbedFooter();
+                Webhook webhk = new(Cfg.WebHookBans);
+                List<Embed> listEmbed = new();
+                Embed embed = new();
+                EmbedAuthor author = new();
+                EmbedFooter footer = new();
                 footer.Text = "© Qurre Team";
                 footer.IconUrl = "https://cdn.scpsl.store/qurre/qurre_ol.png";
                 var ttl = Cfg.Ban;
@@ -153,91 +119,19 @@ namespace SCPDiscordLogs
         }
         internal static void Reply(string data)
         {
-            try
-            {
-                string str = $"reply=;=[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}{statre}";
-                byte[] ba = Encoding.UTF8.GetBytes(str);
-                socket.Send(ba);
-            }
+            try { Client.Emit("reply", new string[] { $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}" }); }
             catch
             {
                 if (Cfg.WebHook == "") return;
-                Webhook webhk = new Webhook(Cfg.WebHook);
-                webhk.Send($"{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] {data}");
+                Webhook webhk = new(Cfg.WebHook);
+                webhk.Send($"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}");
             }
         }
-        internal static void CheckConnect()
+        internal static void Disconnect() => Client.Disconnect(false);
+        internal static void Init()
         {
-            if (!Connected())
-            {
-                try
-                {
-                    if (socket != null && socket.IsBound)
-                    {
-                        socket.Shutdown(SocketShutdown.Both);
-                        socket.Close();
-                    }
-                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect(Cfg.Ip, Server.Port);
-                }
-                catch { }
-            }
-        }
-        internal static void Disconnect() => socket.Disconnect(false);
-        internal static void Connect()
-        {
-            try
-            {
-                if (socket != null && socket.IsBound)
-                {
-                    socket.Shutdown(SocketShutdown.Both);
-                    socket.Close();
-                }
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect(Cfg.Ip, Server.Port);
-            }
-            catch { }
-            Thread messageThread = new(() => BotListener());
-            messageThread.Start();
-        }
-        private static Socket socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        public static bool Connected()
-        {
-            if (socket == null) return false;
-            try { return !((socket.Poll(1000, SelectMode.SelectRead) && (socket.Available == 0)) || !socket.Connected); }
-            catch { return false; }
-        }
-        private static void BotListener()
-        {
-            while (true)
-            {
-                if (Connected())
-                {
-                    try
-                    {
-                        byte[] data = new byte[1000];
-                        int dataLength = socket.Receive(data);
-                        string incomingData = Encoding.UTF8.GetString(data, 0, dataLength);
-                        List<string> messages = new(incomingData.Split('\n'));
-                        while (messages.Count > 0)
-                        {
-                            if (messages[0].Length == 0)
-                            {
-                                messages.RemoveAt(0);
-                                continue;
-                            }
-                            var array = messages[0].Split('⋠');
-                            GameCore.Console.singleton.TypeCommand($"/{array[1]}", new BotSender($"{array[0]}"));
-                            messages.RemoveAt(0);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        if (Connected() && !$"{e}".Trim().StartsWith("System.Threading.ThreadAbortException")) Log.Error($"An error occurred while listening to the connection:\n{e}");
-                    }
-                }
-                Thread.Sleep(1000);
-            }
+            Client = new(Cfg.Port, Cfg.Ip);
+            Client.On("send-to-ra", (data) => { try { GameCore.Console.singleton.TypeCommand($"/{data[1]}", new BotSender($"{data[0]}")); } catch { } });
         }
     }
     internal class BotSender : CommandSender

@@ -9,8 +9,8 @@ namespace SCPDiscordLogs
         #region Peremens
         public override string Developer => "Qurre Team (fydne)";
         public override string Name => "SCP Discord Logs";
-        public override Version Version => new(1, 2, 17);
-        public override Version NeededQurreVersion => new(1, 11, 1);
+        public override Version Version => new(1, 3, 0);
+        public override Version NeededQurreVersion => new(1, 13, 0);
         public override int Priority => -100000;
         public override void Enable() => RegisterEvents();
         public override void Disable() => UnregisterEvents();
@@ -81,11 +81,18 @@ namespace SCPDiscordLogs
             Events.Scp914.Activating += EventHandlers.Activating;
             Events.Scp914.KnobChange += EventHandlers.KnobChange;
             Events.Scp106.Contain += EventHandlers.Contain;
+            Events.Map.LczAnnounce += EventHandlers.LczAnnounce;
+            Events.Player.Heal += EventHandlers.Heal;
+            Events.Player.FlashExplosion += EventHandlers.Explosion;
+            Events.Player.FragExplosion += EventHandlers.Explosion;
+            Events.Player.Flashed += EventHandlers.Flash;
+            Events.Player.InteractScp330 += EventHandlers.Scp330;
+            Events.Player.EatingScp330 += EventHandlers.Scp330;
 
-            Events.Player.Ban += EventHandlers.Ban;
+            Events.Player.Banned += EventHandlers.Ban;
             Events.Player.Kick += EventHandlers.Kick;
 
-            Send.Connect();
+            Send.Init();
         }
         public void UnregisterEvents()
         {
@@ -140,8 +147,15 @@ namespace SCPDiscordLogs
             Events.Scp914.Activating -= EventHandlers.Activating;
             Events.Scp914.KnobChange -= EventHandlers.KnobChange;
             Events.Scp106.Contain -= EventHandlers.Contain;
+            Events.Map.LczAnnounce -= EventHandlers.LczAnnounce;
+            Events.Player.Heal -= EventHandlers.Heal;
+            Events.Player.FlashExplosion -= EventHandlers.Explosion;
+            Events.Player.FragExplosion -= EventHandlers.Explosion;
+            Events.Player.Flashed -= EventHandlers.Flash;
+            Events.Player.InteractScp330 -= EventHandlers.Scp330;
+            Events.Player.EatingScp330 -= EventHandlers.Scp330;
 
-            Events.Player.Ban -= EventHandlers.Ban;
+            Events.Player.Banned -= EventHandlers.Ban;
             Events.Player.Kick -= EventHandlers.Kick;
             EventHandlers = null;
 
@@ -164,7 +178,6 @@ namespace SCPDiscordLogs
             {
                 try { Send.FatalMsg(); } catch { }
                 Thread.Sleep(5000);
-                try { Send.CheckConnect(); } catch { }
             }
         }
         #endregion
