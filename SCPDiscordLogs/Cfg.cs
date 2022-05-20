@@ -3,6 +3,7 @@ namespace SCPDiscordLogs
 {
 	public static class Cfg
 	{
+		public static string Token { get; private set; }
 		public static string Ip { get; private set; }
 		public static ushort Port { get; private set; }
 		public static string Delimiter { get; private set; }
@@ -74,6 +75,8 @@ namespace SCPDiscordLogs
 		internal static void LoadReloadCfg()
 		{
 			Plugin.Translate.Reload();
+			Cfg.Token = Plugin.Config.GetString("logs_token", "YourTokenChangeThisForSafety", "The token for the executable application. " +
+				"If you are using localhost, you can use empty token.\nMust match the token from the executable application's config");
 			Cfg.Ip = Plugin.Config.GetString("logs_ip", "localhost", "ip specified in a bot config");
 			Cfg.Port = Plugin.Config.GetUShort("logs_port", Server.Port, "port specified in a bot config");
 			Cfg.Delimiter = Plugin.Config.GetString("logs_delimiter", "^", "delimiter between id and nickname in ra");

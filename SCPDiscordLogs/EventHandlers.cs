@@ -212,12 +212,12 @@ namespace SCPDiscordLogs
 		internal void LczAnnounce(LczAnnounceEvent ev)
 		{
 			if (!ev.Allowed) return;
-			int mins;
+			double mins;
 			if (ev.Id == 0) mins = 15;
 			else if (ev.Id == 1) mins = 10;
 			else if (ev.Id == 2) mins = 5;
 			else if (ev.Id == 3) mins = 1;
-			else if (ev.Id == 4) mins = (int)0.5;
+			else if (ev.Id == 4) mins = 0.5;
 			else return;
 			Send.Msg(Plugin.Translate.LczAnnounce.Replace("%minutes%", $"{mins}"));
 		}

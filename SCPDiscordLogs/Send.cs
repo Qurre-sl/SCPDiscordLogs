@@ -5,7 +5,7 @@ using Qurre.API;
 using QurreSocket;
 namespace SCPDiscordLogs
 {
-    internal class Send
+    internal static class Send
     {
         #region ClosePls
         public static string AntiMD(string text)
@@ -131,6 +131,7 @@ namespace SCPDiscordLogs
         internal static void Init()
         {
             Client = new(Cfg.Port, Cfg.Ip);
+            Client.On("connect", _ => Client.Emit("send.token", new object[] { Cfg.Token }));
             Client.On("send-to-ra", (data) => { try { GameCore.Console.singleton.TypeCommand($"/{data[1]}", new BotSender($"{data[0]}")); } catch { } });
         }
     }
