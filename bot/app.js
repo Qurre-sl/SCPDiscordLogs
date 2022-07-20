@@ -22,7 +22,7 @@ async function Init() {
                 if(config.PluginToken != token) return;
                 if(!verified){
                     verified = true;
-                    try{client.channels.cache.get(config.logs).send(`[${format(new Date(Date.now()))}] ${config.translate.connect}`).catch(() => {});}catch{}
+                    try{client.channels.cache.get(config.logs).send(`[<t:${Math.floor(Date.now() / 1000)}:T>] ${config.translate.connect}`).catch(() => {});}catch{}
                     try{client.user.setPresence({ activity: { name: `0 ${config.translate.player}`, type: 'LISTENING' }, status: 'idle' }).catch(() => {});}catch{}
                     socket.on('ban', ([banned, banner, reason, time]) => {
                         if (config.bklogs == '' || config.bklogs == null || config.bklogs == undefined) return;
@@ -88,7 +88,7 @@ async function Init() {
                         try{client.channels.cache.get(config.rasend).send(message).catch(() => {});}catch{}
                     });
                     socket.on('disconnect', () => {
-                        try{client.channels.cache.get(config.logs).send(`[${format(new Date(Date.now()))}] ${config.translate.disconnect}`);}catch{}
+                        try{client.channels.cache.get(config.logs).send(`[<t:${Math.floor(Date.now() / 1000)}:T>] ${config.translate.disconnect}`);}catch{}
                         try{client.user.setPresence({ activity: { name: `${config.translate.no_server}`, type: 'LISTENING' }, status: 'dnd' }).catch(() => {});}catch{}
                     });
                 }
@@ -113,9 +113,6 @@ async function Init() {
     }
 }
 Init();
-const fj = {minimumIntegerDigits: 2,useGrouping: false};
-const fs = 'en-US';
-function format(d){return (d.getHours().toLocaleString(fs, fj) + ":" + d.getMinutes().toLocaleString(fs, fj) + ":" + d.getSeconds().toLocaleString(fs, fj));}
 function sleep(ms){return new Promise(resolve => setTimeout(resolve, ms));}
 function login(client, token) {
     return new Promise(resolve => {

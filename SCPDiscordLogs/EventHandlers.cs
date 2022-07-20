@@ -384,7 +384,7 @@ namespace SCPDiscordLogs
 			}
 			catch { }
 		}
-		internal void Ban(BannedEvent ev) => Send.BanKick(ev.Details.Reason, Api.PlayerInfo(ev.Player, false), Send.AntiMD(ev.Details.Issuer), new DateTime(ev.Details.Expires).AddHours((DateTime.Now - DateTime.UtcNow).TotalHours).ToString("dd.MM.yyyy HH:mm"));
+		internal void Ban(BannedEvent ev) => Send.BanKick(ev.Details.Reason, Api.PlayerInfo(ev.Player, false), Send.AntiMD(ev.Details.Issuer), $"<t:{new DateTimeOffset(new DateTime(ev.Details.Expires).AddHours((DateTime.Now - DateTime.UtcNow).TotalHours)).ToUnixTimeSeconds()}:f>");
 		internal void Kick(KickEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), "kick");
 	}
 }

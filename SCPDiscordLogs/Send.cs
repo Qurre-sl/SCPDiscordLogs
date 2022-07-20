@@ -25,6 +25,7 @@ namespace SCPDiscordLogs
         internal static Client Client;
         internal static string msg = "";
         internal static string last_msg = "";
+        private static string GetTime => $"<t:{DateTimeOffset.Now.ToUnixTimeSeconds()}:T>";
         internal static void FatalMsg()
         {
             try
@@ -46,7 +47,7 @@ namespace SCPDiscordLogs
             if (msg.Length > 1500) FatalMsg();
             if (last_msg == data) return;
             last_msg = data;
-            msg += $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}";
+            msg += $"[{GetTime}] {data}";
             msg += "\n";
         }
         internal static void PlayersInfo()
@@ -59,24 +60,24 @@ namespace SCPDiscordLogs
         }
         internal static void RemoteAdmin(string data)
         {
-            try { Client.Emit("ra", new string[] { $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}" }); }
+            try { Client.Emit("ra", new string[] { $"[{GetTime}] {data}" }); }
             catch
             {
                 if (Cfg.WebHook == "") return;
                 Webhook webhk = new(Cfg.WebHook);
-                webhk.Send($"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}");
+                webhk.Send($"[{GetTime}] {data}");
             }
         }
         internal static void TeamKill(string data)
         {
             if (Round.Started)
             {
-                try { Client.Emit("tk", new string[] { $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}" }); }
+                try { Client.Emit("tk", new string[] { $"[{GetTime}] {data}" }); }
                 catch
                 {
                     if (Cfg.WebHook == "") return;
                     Webhook webhk = new(Cfg.WebHook);
-                    webhk.Send($"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}");
+                    webhk.Send($"[{GetTime}] {data}");
                 }
             }
         }
@@ -119,12 +120,12 @@ namespace SCPDiscordLogs
         }
         internal static void Reply(string data)
         {
-            try { Client.Emit("reply", new string[] { $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}" }); }
+            try { Client.Emit("reply", new string[] { $"[{GetTime}] {data}" }); }
             catch
             {
                 if (Cfg.WebHook == "") return;
                 Webhook webhk = new(Cfg.WebHook);
-                webhk.Send($"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}] {data}");
+                webhk.Send($"[{GetTime}] {data}");
             }
         }
         internal static void Disconnect() => Client.Disconnect(false);
