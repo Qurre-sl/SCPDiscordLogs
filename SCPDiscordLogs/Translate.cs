@@ -1,14 +1,12 @@
-﻿using Qurre.API.Addons;
-namespace SCPDiscordLogs
+﻿namespace SCPDiscordLogs
 {
-	public class Translate : IConfig
+	public class Translate
 	{
-		public string Name { get; set; } = "SCPDiscordLogs-Translate";
 		public string Kick { get; set; } = "Kick";
 		public string Ban { get; set; } = "Ban";
 		public string KickWebHook { get; set; } = "%kicked% has been kicked by %kicker%. Reason: %reason%";
 		public string BanWebHook { get; set; } = "%banned% has been banned by %banner%. Reason: %reason%\nUntil %to%";
-		public string RoundInfo { get; set; } = "Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip%";
+		public string RoundInfo { get; set; } = "Players online: %players%. Round duration: %time% min. Players alive: %alive%. SCPs alive: %scps%. %alpha% IP: %ip% | Updated: %date%";
 		public string PickupItem { get; set; } = "%player% picked up %item%.";
 		public string DropItem { get; set; } = "%player% dropped %item%.";
 		public string ChangeItem { get; set; } = "%player% changed the item in hand: %olditem% -> %newitem%.";
@@ -43,7 +41,6 @@ namespace SCPDiscordLogs
 		public string WeaponReload { get; set; } = "%player% reloaded weapon: %weapon%";
 		public string GetLvl079 { get; set; } = "%player% get %lvl% SCP 079 level.";
 		public string GetXp079 { get; set; } = "%player% get %exp% for %type%.";
-		public string Contain106 { get; set; } = "%player% succesfuly recontained SCP 106.";
 		public string FemurEnter { get; set; } = "%player% sacrificed himself in SCP 106 cell.";
 		public string PocketEscape { get; set; } = "%player% escaped from pocket dimension.";
 		public string PocketEnter { get; set; } = "%player% hit the pocket dimension.";

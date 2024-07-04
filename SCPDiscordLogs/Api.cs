@@ -1,44 +1,75 @@
-﻿using Qurre.API;
+﻿using PlayerRoles;
+using Qurre.API;
+
 namespace SCPDiscordLogs
 {
-    public static class Api
+    static public class Api
     {
-        public static bool Connected => Send.Client.Connected;
-        public static bool BlockInRaLogs(string UserID) => Send.BlockInRaLogs(UserID);
-        public static string PlayerInfo(Player pl, bool role = true)
+        static public bool Connected => Send.Client.Connected;
+
+        static public string AntiMD(string text)
         {
-            if (pl == Server.Host) return $"{pl.Nickname}";
+            return text.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
+        }
+        static public bool BlockInRaLogs(string UserID) => Send.BlockInRaLogs(UserID);
+        static public bool GLobalBypass(string UserID) => Send.GLobalBypass(UserID);
+        static public string PlayerInfo(Player pl, bool role = true)
+        {
+            if (pl == Server.Host) return $"{pl.UserInformation.Nickname}";
             else
             {
-                string nick = pl.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~")
+                string nick = pl.UserInformation.Nickname.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~")
                     .Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
                 try
                 {
                     if (role)
                     {
-                        var _role = pl.Role;
-                        if ((_role == RoleType.Spectator || _role == RoleType.None) && EventHandlers.Cached.TryGetValue(pl, out var __role)) _role = __role;
-                        return $"{nick} - {pl.UserId} ({_role})";
+                        var _role = pl.RoleInformation.Role;
+                        if ((_role is RoleTypeId.Spectator or RoleTypeId.None) && EventHandlers.Cached.TryGetValue(pl, out var __role))
+                            _role = __role;
+                        return $"{nick} - {pl.UserInformation.UserId} ({_role})";
                     }
-                    else return $"{nick} - {pl.UserId}";
+                    else return $"{nick} - {pl.UserInformation.UserId}";
                 }
                 catch
                 {
-                    try { return $"{nick} - {pl.UserId}"; }
+                    try { return $"{nick} - {pl.UserInformation.UserId}"; }
                     catch { return nick; }
                 }
             }
         }
-        public static void SendMessage(string data, Status status = Status.Standart)
+
+        static public void SendMessage(string data, Status status = Status.Standart)
         {
-            if (status == Status.Standart) Send.Msg(data);
-            else if (status == Status.RemoteAdmin) Send.RemoteAdmin(data);
-            else if (status == Status.TeamKill) Send.TeamKill(data);
-            else if (status == Status.Reply) Send.Reply(data);
+            switch (status)
+            {
+                case Status.Standart:
+                    Send.Msg(data);
+                    break;
+
+                case Status.RemoteAdmin:
+                    Send.RemoteAdmin(data);
+                    break;
+
+                case Status.TeamKill:
+                    Send.TeamKill(data);
+                    break;
+
+                case Status.Reply:
+                    Send.Reply(data);
+                    break;
+            }
         }
-        public static void SendBanOrKick(string reason, string banned, string banner, string time) => Send.BanKick(reason, banned, banner, time);
-        public static void SendPlayers() => Send.PlayersInfo();
-        public static void SendChannelTopic(string data) => Send.ChannelTopic(data);
+
+        static public void SendBanOrKick(string reason, string banned, string banner, string time)
+            => Send.BanKick(reason, banned, banner, time);
+
+        static public void SendPlayers()
+            => Send.PlayersInfo();
+
+        static public void SendChannelTopic(string data)
+            => Send.ChannelTopic(data);
+
         public enum Status : byte
         {
             Standart,

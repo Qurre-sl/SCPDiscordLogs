@@ -1,390 +1,704 @@
-﻿using System;
-using System.Linq;
-using Respawning;
-using Qurre;
-using Qurre.API;
-using Qurre.API.Events;
+﻿using Qurre.API;
+using Qurre.API.Attributes;
 using Qurre.API.Objects;
+using Qurre.Events;
+using Qurre.Events.Structs;
 using Qurre.API.Controllers;
+using System;
+using System.Linq;
 using System.Collections.Generic;
+using PlayerRoles;
+
+#pragma warning disable IDE0051
 namespace SCPDiscordLogs
 {
-	internal class EventHandlers
+	static class EventHandlers
 	{
-		internal EventHandlers() => Log.Debug("[SCPDiscordLogs.EventHandlers] successfully initialized");
-		internal void Waiting() => Send.Msg(Cfg.T1);
-		internal void RoundStart() => Send.Msg(Cfg.T2.Replace("%players%", $"{Player.List.Count()}"));
-		internal void RoundEnd(RoundEndEvent _) => Send.Msg(Cfg.T3.Replace("%players%", $"{Player.List.Count()}"));
-		internal void Drop(DropItemEvent ev) => Send.Msg(Cfg.T5.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
-		internal void Detonation() => Send.Msg(Cfg.T6);
-		internal void GeneratorActivate(GeneratorActivateEvent _) => Send.Msg(Cfg.T7);
-		internal void Banned(BannedEvent ev) => Send.Msg(Cfg.T8.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
-			.Replace("%issuer%", ev.Details.Issuer).Replace("%reason%", ev.Details.Reason).Replace("%time%", $"{new DateTime(ev.Details.Expires):dd.MM.yyyy HH:mm}"));
-		internal void ItemChange(ItemChangeEvent ev)
-		{
-			try { Send.Msg(Cfg.T4.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%olditem%", $"{(ev.OldItem == null ? "None" : ev.OldItem.Type)}").Replace("%newitem%", $"{(ev.NewItem == null ? "None" : ev.NewItem.Type)}")); } catch { }
+		static internal readonly Dictionary<Player, RoleTypeId> Cached = new();
+
+		#region Round
+		[EventMethod(RoundEvents.Waiting, int.MinValue)]
+        static void Waiting()
+        {
+			Cached.Clear();
+			Send.Msg(Cfg.Translate.Waiting);
 		}
-		internal void ThrowItem(ThrowItemEvent ev)
+
+		[EventMethod(RoundEvents.Start, int.MinValue)]
+		static void RoundStart() => Send.Msg(Cfg.Translate.RoundStart.Replace("%players%", $"{Player.List.Count()}"));
+
+		[EventMethod(RoundEvents.End, int.MinValue)]
+		static void RoundEnd() => Send.Msg(Cfg.Translate.RoundEnd.Replace("%players%", $"{Player.List.Count()}"));
+		#endregion
+
+		#region Alpha
+		[EventMethod(AlphaEvents.Detonate, int.MinValue)]
+		static void Detonate() => Send.Msg(Cfg.Translate.AlphaDetonation);
+
+		[EventMethod(AlphaEvents.Start, int.MinValue)]
+		static void AlphaStart(AlphaStartEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T36.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.Type}"));
+			if (!ev.Allowed)
+				return;
+
+			Send.Msg(Cfg.Translate.AlphaStart.Replace("%time%", $"{Alpha.TimeToDetonation}"));
 		}
-		internal void ReportCheater(ReportCheaterEvent ev)
+
+		[EventMethod(AlphaEvents.Stop, int.MinValue)]
+		static void AlphaStop(AlphaStopEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T9.Replace("%sender%", Api.PlayerInfo(ev.Sender, false)).Replace("%target%", Api.PlayerInfo(ev.Target, false)).Replace("%reason%", ev.Reason));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.AlphaStop.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		internal void PortalCreate(PortalCreateEvent ev)
+
+		[EventMethod(AlphaEvents.UnlockPanel, int.MinValue)]
+		static void UnlockAlphaPanel(UnlockPanelEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T10.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.AlphaPanel.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		internal void GetEXP(GetEXPEvent ev)
+		#endregion
+
+		#region Player
+		[EventMethod(PlayerEvents.DropItem, int.MinValue)]
+		static void DropItem(DropItemEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T11.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%exp%", $"{ev.Amount}").Replace("%type%", $"{ev.Type}"));
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.DropItem
+			.Replace("%player%", Api.PlayerInfo(ev.Player))
+			.Replace("%item%", $"{ev.Item.Type}"));
 		}
-		internal void GetLVL(GetLVLEvent ev)
+
+		[EventMethod(PlayerEvents.ChangeItem, int.MinValue)]
+		static void ItemChange(ChangeItemEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T12.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%lvl%", $"{ev.NewLevel}"));
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.ChangeItem
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%olditem%", $"{(ev.OldItem is null ? "None" : ev.OldItem.Type)}")
+				.Replace("%newitem%", $"{(ev.NewItem is null ? "None" : ev.NewItem.Type)}")
+			);
 		}
-		internal void RechargeWeapon(RechargeWeaponEvent ev)
+
+		[EventMethod(PlayerEvents.ThrowProjectile, int.MinValue)]
+		static void ThrowItem(ThrowProjectileEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T13.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%weapon%", $"{ev.Player.CurrentItem.TypeId}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.ThrowItem
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%item%", $"{ev.Item.Type}")
+			);
 		}
-		internal void InteractLocker(InteractLockerEvent ev)
+
+		[EventMethod(PlayerEvents.InteractGenerator, int.MinValue)]
+		static void InteractGenerator(InteractGeneratorEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T14.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%locker%", ev.Locker.Name));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			switch (ev.Status)
+			{
+				case GeneratorStatus.Activate:
+					Send.Msg(Cfg.Translate.GeneratorInject.Replace("%player%", Api.PlayerInfo(ev.Player)));
+					break;
+
+				case GeneratorStatus.Deactivate:
+					Send.Msg(Cfg.Translate.GeneratorEjected.Replace("%player%", Api.PlayerInfo(ev.Player)));
+					break;
+
+				case GeneratorStatus.Unlock:
+					Send.Msg(Cfg.Translate.GeneratorUnlock.Replace("%player%", Api.PlayerInfo(ev.Player)));
+					break;
+
+				case GeneratorStatus.OpenDoor:
+					Send.Msg(Cfg.Translate.GeneratorOpen.Replace("%player%", Api.PlayerInfo(ev.Player)));
+					break;
+
+				case GeneratorStatus.CloseDoor:
+					Send.Msg(Cfg.Translate.GeneratorClose.Replace("%player%", Api.PlayerInfo(ev.Player)));
+					break;
+			}
 		}
-		internal void TeslaTrigger(TeslaTriggerEvent ev)
+
+		[EventMethod(PlayerEvents.InteractDoor, int.MinValue)]
+		static void InteractDoor(InteractDoorEvent ev)
 		{
-			if (ev.Triggerable) Send.Msg(Cfg.T15.Replace("%player%", Api.PlayerInfo(ev.Player)));
+			if (!ev.Allowed)
+				return;
+
+			if (ev.Door.Name.Length < 2)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(ev.Door.DoorVariant.NetworkTargetState
+					? Cfg.Translate.InteractDoorClose
+						.Replace("%player%", Api.PlayerInfo(ev.Player))
+						.Replace("%door%", $"{ev.Door.Name}")
+
+					: Cfg.Translate.InteractDoorOpen
+						.Replace("%player%", Api.PlayerInfo(ev.Player))
+						.Replace("%door%", $"{ev.Door.Name}")
+					);
 		}
-		internal void Activating(ActivatingEvent ev)
+
+		[EventMethod(PlayerEvents.InteractLocker, int.MinValue)]
+		static void InteractLocker(InteractLockerEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T16.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%state%", $"{Qurre.API.Controllers.Scp914.KnobState}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.InteractLocker
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%locker%", ev.Locker.Name)
+			);
 		}
-		internal void KnobChange(KnobChangeEvent ev)
+
+		[EventMethod(PlayerEvents.InteractLift, int.MinValue)]
+		static void InteractLift(InteractLiftEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T17.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%setting%", $"{ev.Setting}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.InteractLift
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%lift%", ev.Lift.GameObject.name)
+			);
 		}
-		internal void PocketEnter(PocketEnterEvent ev)
+
+		[EventMethod(PlayerEvents.InteractScp330, int.MinValue)]
+		static void Scp330(InteractScp330Event ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T18.Replace("%player%", Api.PlayerInfo(ev.Player)));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Scp330Interact.Replace("%player%", Api.PlayerInfo(ev.Player)));
 		}
-		internal void PocketEscape(PocketEscapeEvent ev)
+
+		[EventMethod(PlayerEvents.Join, int.MinValue)]
+		static void Join(JoinEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T19.Replace("%player%", Api.PlayerInfo(ev.Player)));
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Join.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 		}
-		internal void PortalUsing(PortalUsingEvent ev)
+
+		[EventMethod(PlayerEvents.Leave, int.MinValue)]
+		static void Leave(LeaveEvent ev)
 		{
-			if (ev.Allowed) Send.Msg(Cfg.T20.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
-		}
-		internal void Femur(FemurBreakerEnterEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T21.Replace("%player%", Api.PlayerInfo(ev.Player)));
-		}
-		internal void Join(JoinEvent ev)
-		{
-			if (ev.Player.Nickname != "Dedicated Server") Send.Msg(Cfg.T22.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
-		}
-		internal void UnCuff(UnCuffEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T23.Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%uncuffer%", Api.PlayerInfo(ev.Cuffer)));
-		}
-		internal void Cuff(CuffEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T24.Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%cuffer%", Api.PlayerInfo(ev.Cuffer)));
-		}
-		internal void Pickup(PickupItemEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T26.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Pickup.Type}"));
-		}
-		internal void GroupChange(GroupChangeEvent ev)
-		{
-			if (ev.Allowed) try { Send.Msg(Cfg.T27.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%group%", $"{ev.NewGroup.BadgeText} ({ev.NewGroup.BadgeColor})")); } catch { }
-		}
-		internal void Decon(LczDeconEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T28);
-		}
-		internal void AlphaStart(AlphaStartEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T29.Replace("%time%", $"{Alpha.AlphaWarheadController.NetworktimeToDetonation}"));
-		}
-		internal void AlphaStop(AlphaStopEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T30.Replace("%player%", Api.PlayerInfo(ev.Player)));
-		}
-		internal void EnableAlphaPanel(EnableAlphaPanelEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T31.Replace("%player%", Api.PlayerInfo(ev.Player)));
-		}
-		internal void InteractLift(InteractLiftEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T32.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%lift%", ev.Lift.Name));
-		}
-		internal void Contain(ContainEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Cfg.T33.Replace("%player%", Api.PlayerInfo(ev.Player)));
-		}
-		internal void Explosion(FlashExplosionEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Plugin.Translate.FlashExplosion.Replace("%player%", Api.PlayerInfo(ev.Thrower)));
-		}
-		internal void Explosion(FragExplosionEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Plugin.Translate.FragExplosion.Replace("%player%", Api.PlayerInfo(ev.Thrower)));
-		}
-		internal void Flash(FlashedEvent ev)
-		{
-			if (ev.Allowed) Send.Msg(Plugin.Translate.Flashed.Replace("%thrower%", Api.PlayerInfo(ev.Thrower)).Replace("%target%", Api.PlayerInfo(ev.Target)));
-		}
-		internal void Scp330(InteractScp330Event ev)
-		{
-			if (ev.Allowed) Send.Msg(Plugin.Translate.Scp330Interact.Replace("%player%", Api.PlayerInfo(ev.Player)));
-		}
-		internal void Scp330(EatingScp330Event ev)
-		{
-			if (ev.Allowed) Send.Msg(Plugin.Translate.Scp330Eat.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%candy%", $"{ev.Candy}"));
-		}
-		internal void TeamRespawn(TeamRespawnEvent ev)
-		{
-			string msg = ev.NextKnownTeam == SpawnableTeamType.ChaosInsurgency ? $":spy: Chaos Insurgency" : $":cop: Nine-Tailed Fox";
-			Send.Msg(Cfg.T34.Replace("%team%", msg).Replace("%players%", $"{ev.Players.Count}"));
-		}
-		internal void Leave(LeaveEvent ev)
-		{
-			Send.Msg(Cfg.T35.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Leave.Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 			Send.PlayersInfo();
 		}
-		internal void ItemUsed(ItemUsedEvent ev)
+
+		[EventMethod(PlayerEvents.UnCuff, int.MinValue)]
+		static void UnCuff(UnCuffEvent ev)
 		{
-			if (ev.Player == null) return;
-			Send.Msg(Cfg.T37.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%item%", $"{ev.Item.TypeId}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Target.UserInformation.UserId) ||
+				Send.GLobalBypass(ev.Cuffer.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.UnCuff
+				.Replace("%target%", Api.PlayerInfo(ev.Target))
+				.Replace("%uncuffer%", Api.PlayerInfo(ev.Cuffer))
+			);
 		}
-		internal void RoleChange(RoleChangeEvent ev)
+
+		[EventMethod(PlayerEvents.Cuff, int.MinValue)]
+		static void Cuff(CuffEvent ev)
 		{
-			if (ev.Player == null) return;
-			Send.Msg(Cfg.T39.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%role%", $"{ev.NewRole}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Target.UserInformation.UserId) ||
+				Send.GLobalBypass(ev.Cuffer.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Cuff
+				.Replace("%target%", Api.PlayerInfo(ev.Target))
+				.Replace("%cuffer%", Api.PlayerInfo(ev.Cuffer))
+			);
 		}
-		internal void Escape(EscapeEvent ev)
+
+		[EventMethod(PlayerEvents.PickupItem, int.MinValue)]
+		static void Pickup(PickupItemEvent ev)
 		{
-			Send.Msg(Cfg.T38.Replace("%player%", Api.PlayerInfo(ev.Player, false)).Replace("%role%", $"{ev.NewRole}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.PickupItem
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%item%", $"{ev.Pickup.Type}")
+			);
 		}
-		internal void SendingConsole(SendingConsoleEvent ev)
+
+		[EventMethod(PlayerEvents.PickupArmor, int.MinValue)]
+		static void Pickup(PickupArmorEvent ev)
 		{
-			if (ev.Player == null || ev.Player == Server.Host) return;
-			Send.Msg(Cfg.T40.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%command%", $"{Send.AntiMD(ev.Message)}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.PickupItem
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%item%", $"{ev.Pickup.Type}")
+			);
 		}
-		internal void Heal(HealEvent ev)
+
+		[EventMethod(PlayerEvents.UsedItem, int.MinValue)]
+		static void UsedItem(UsedItemEvent ev)
 		{
-			if (!ev.Allowed) return;
-			double hp = Math.Round(ev.Hp);
-			if (1 >= hp) return;
-			Send.Msg(Plugin.Translate.Heal.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%amout%", $"{hp}"));
+			if (ev.Item is null)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.UseItem
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%item%", $"{ev.Item.Type}")
+			);
 		}
-		internal void Upgrade(UpgradeEvent ev)
+
+		[EventMethod(EffectEvents.Flashed, int.MinValue)]
+		static void Flash(PlayerFlashedEvent ev)
 		{
-			string players = "";
-			foreach (Player player in ev.Players) players += $"\n{Api.PlayerInfo(player)}";
-			string items = "";
-			foreach (var item in ev.Items) items += $"\n{item.Info.ItemId}";
-			Send.Msg(Cfg.T41.Replace("%players%", players).Replace("%items%", items));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Thrower.UserInformation.UserId) ||
+                Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Flashed
+				.Replace("%thrower%", Api.PlayerInfo(ev.Thrower))
+				.Replace("%target%", Api.PlayerInfo(ev.Player))
+			);
 		}
-		internal void Damage(DamageEvent ev)
+
+		[EventMethod(PlayerEvents.ChangeGroup, int.MinValue)]
+		static void ChangeGroup(ChangeGroupEvent ev)
 		{
-			if (ev.Allowed)
+			if (!ev.Allowed)
+				return;
+
+			if (ev.Group is null)
+				return;
+
+			if (ev.Player is null)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.AdminRoleChange
+				.Replace("%player%", Api.PlayerInfo(ev.Player, false))
+				.Replace("%group%", $"{ev.Group.BadgeText} ({ev.Group.BadgeColor})")
+			);
+		}
+
+		[EventMethod(PlayerEvents.ChangeRole, int.MinValue)]
+		static void ChangeRole(ChangeRoleEvent ev)
+		{
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Spawn
+				.Replace("%player%", Api.PlayerInfo(ev.Player, false))
+				.Replace("%role%", $"{ev.Role}")
+			);
+		}
+
+		[EventMethod(PlayerEvents.Escape, int.MinValue)]
+		static void Escape(EscapeEvent ev)
+		{
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Escape
+				.Replace("%player%", Api.PlayerInfo(ev.Player, false))
+				.Replace("%role%", $"{ev.Role}")
+			);
+		}
+
+		[EventMethod(PlayerEvents.Damage, int.MinValue)]
+		static void Damage(DamageEvent ev)
+		{
+			if (!ev.Allowed)
+				return;
+
+			if (ev.Attacker.UserInformation.Id == ev.Target.UserInformation.Id)
+				return;
+
+			if (Send.GLobalBypass(ev.Attacker.UserInformation.UserId) ||
+				Send.GLobalBypass(ev.Target.UserInformation.UserId))
+				return;
+
+			if (Ally(ev.Attacker, ev.Target))
+				Send.Msg(Cfg.Translate.TeamDamage
+					.Replace("%tool%", $"{ev.DamageType}")
+					.Replace("%amount%", $"{Math.Round(ev.Damage)}")
+					.Replace("%attacker%", Api.PlayerInfo(ev.Attacker))
+					.Replace("%target%", Api.PlayerInfo(ev.Target)));
+			else
+				Send.Msg(Cfg.Translate.Damage
+					.Replace("%tool%", $"{ev.DamageType}")
+					.Replace("%amount%", $"{Math.Round(ev.Damage)}")
+					.Replace("%attacker%", Api.PlayerInfo(ev.Attacker))
+					.Replace("%target%", Api.PlayerInfo(ev.Target)));
+		}
+
+		[EventMethod(PlayerEvents.Dies, int.MinValue)]
+		static void Dies(DiesEvent ev)
+		{
+			if (Cached.ContainsKey(ev.Target))
+				Cached.Remove(ev.Target);
+
+			Cached.Add(ev.Target, ev.Target.RoleInformation.Role);
+		}
+
+		[EventMethod(PlayerEvents.Dead, int.MinValue)]
+		static void Dead(DeadEvent ev)
+		{
+			if (ev.Attacker is null || ev.Target is null)
+				return;
+
+			if (ev.Attacker.UserInformation.Id == ev.Target.UserInformation.Id)
+				return;
+
+			if (Send.GLobalBypass(ev.Attacker.UserInformation.UserId) ||
+				Send.GLobalBypass(ev.Target.UserInformation.UserId))
+				return;
+
+			if (!Ally(ev.Attacker, ev.Target))
 			{
-				if (ev.Attacker.Id == ev.Target.Id) return;
-				if (ev.Attacker != null && Ally(ev.Attacker, ev.Target) && ev.Target != ev.Attacker)
-					Send.Msg(Cfg.T42.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{Math.Round(ev.Amount)}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
-				else Send.Msg(Cfg.T43.Replace("%tool%", $"{ev.DamageType}").Replace("%amount%", $"{Math.Round(ev.Amount)}").Replace("%attacker%", Api.PlayerInfo(ev.Attacker)).Replace("%target%", Api.PlayerInfo(ev.Target)));
+				Send.Msg(Cfg.Translate.Kill
+					.Replace("%killer%", Api.PlayerInfo(ev.Attacker))
+					.Replace("%target%", Api.PlayerInfo(ev.Target))
+					.Replace("%tool%", $"{ev.DamageType}"));
+				return;
 			}
+
+			string message = Cfg.Translate.TeamKill
+				.Replace("%killer%", Api.PlayerInfo(ev.Attacker))
+				.Replace("%target%", Api.PlayerInfo(ev.Target))
+				.Replace("%tool%", $"{ev.DamageType}");
+
+			Send.Msg(message);
+			if (!Round.Ended)
+				Send.TeamKill(message);
 		}
-		internal void InteractGenerator(InteractGeneratorEvent ev)
+		#endregion
+
+		#region SCPs
+		[EventMethod(ScpEvents.ActivateGenerator, int.MinValue)]
+		static void ActivateGenerator()
+			=> Send.Msg(Cfg.Translate.GeneratorActivate);
+
+		[EventMethod(ScpEvents.Scp079GetExp, int.MinValue)]
+		static void GetEXP(Scp079GetExpEvent ev)
 		{
-			if (ev.Allowed)
-			{
-				if (ev.Status == GeneratorStatus.Activated) Send.Msg(Cfg.T44.Replace("%player%", Api.PlayerInfo(ev.Player)));
-				else if (ev.Status == GeneratorStatus.OpenDoor) Send.Msg(Cfg.T45.Replace("%player%", Api.PlayerInfo(ev.Player)));
-				else if (ev.Status == GeneratorStatus.Unlocked) Send.Msg(Cfg.T46.Replace("%player%", Api.PlayerInfo(ev.Player)));
-				else if (ev.Status == GeneratorStatus.CloseDoor) Send.Msg(Cfg.T47.Replace("%player%", Api.PlayerInfo(ev.Player)));
-				else if (ev.Status == GeneratorStatus.Disabled) Send.Msg(Cfg.T48.Replace("%player%", Api.PlayerInfo(ev.Player)));
-			}
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.GetXp079
+				.Replace("%player%", Api.PlayerInfo(ev.Player, false))
+				.Replace("%exp%", $"{ev.Amount}")
+				.Replace("%type%", $"{ev.Type}")
+				);
 		}
-		internal void LczAnnounce(LczAnnounceEvent ev)
+
+		[EventMethod(ScpEvents.Scp079NewLvl, int.MinValue)]
+		static void NewLvl(Scp079NewLvlEvent ev)
 		{
-			if (!ev.Allowed) return;
-			double mins;
-			if (ev.Id == 0) mins = 15;
-			else if (ev.Id == 1) mins = 10;
-			else if (ev.Id == 2) mins = 5;
-			else if (ev.Id == 3) mins = 1;
-			else if (ev.Id == 4) mins = 0.5;
-			else return;
-			Send.Msg(Plugin.Translate.LczAnnounce.Replace("%minutes%", $"{mins}"));
+			if (!ev.Allowed)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.GetLvl079
+				.Replace("%player%", Api.PlayerInfo(ev.Player, false))
+				.Replace("%lvl%", $"{ev.Level}")
+				);
 		}
-		internal void InteractDoor(InteractDoorEvent ev)
+		#endregion
+
+		#region Administration
+		[EventMethod(PlayerEvents.Banned, int.MinValue)]
+		static void Banned(BannedEvent ev)
+			=> Send.Msg(Cfg.Translate.Banned.Replace("%player%", $"{ev.Details.OriginalName} - {ev.Details.Id}")
+			.Replace("%issuer%", ev.Details.Issuer)
+				.Replace("%reason%", ev.Details.Reason)
+				.Replace("%time%", $"{new DateTime(ev.Details.Expires):dd.MM.yyyy HH:mm}"));
+
+		[EventMethod(PlayerEvents.Banned, int.MinValue)]
+		static void Ban(BannedEvent ev)
 		{
-			try
-			{
-				if (ev.Door.Name.Length < 2) return;
-				if (ev.Allowed)
-					Send.Msg(ev.Door.DoorVariant.NetworkTargetState
-							? Cfg.T49.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%door%", $"{ev.Door.Name}")
-							: Cfg.T50.Replace("%player%", Api.PlayerInfo(ev.Player)).Replace("%door%", $"{ev.Door.Name}")
-							);
-			}
-			catch { }
+			if (ev.Type == BanHandler.BanType.IP)
+				return;
+
+			Send.BanKick(ev.Details.Reason, Api.PlayerInfo(ev.Player, false), Api.AntiMD(ev.Details.Issuer),
+				$"<t:{new DateTimeOffset(new DateTime(ev.Details.Expires).AddHours((DateTime.Now - DateTime.UtcNow).TotalHours)).ToUnixTimeSeconds()}:f>");
 		}
-		internal static Dictionary<Player, RoleType> Cached = new();
-		internal void Dies(DiesEvent ev)
+
+		[EventMethod(PlayerEvents.Kick, int.MinValue)]
+		static void Kick(KickEvent ev)
 		{
-			if (Cached.ContainsKey(ev.Target)) Cached.Remove(ev.Target);
-			Cached.Add(ev.Target, ev.Target.Role);
+			if (!ev.Allowed)
+				return;
+
+			Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Player, false), Api.AntiMD(ev.Issuer.UserInformation.Nickname), "kick");
 		}
-		internal void Dead(DeadEvent ev)
+		#endregion
+
+		#region Server
+		[EventMethod(ServerEvents.CheaterReport, int.MinValue)]
+		static void ReportCheater(CheaterReportEvent ev)
 		{
-			try
-			{
-				if (ev.Killer.Id == ev.Target.Id) return;
-				if (ev.Killer != null && Ally(ev.Killer, ev.Target))
-				{
-					Send.TeamKill(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", $"{ev.DamageType}"));
-					Send.Msg(Cfg.T51.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", $"{ev.DamageType}"));
-				}
-				else Send.Msg(Cfg.T52.Replace("%killer%", Api.PlayerInfo(ev.Killer)).Replace("%target%", Api.PlayerInfo(ev.Target)).Replace("%tool%", $"{ev.DamageType}"));
-			}
-			catch { }
+			if (!ev.Allowed)
+				return;
+
+			Send.Msg(Cfg.Translate.ReportCheater
+				.Replace("%sender%", Api.PlayerInfo(ev.Issuer, false))
+				.Replace("%target%", Api.PlayerInfo(ev.Target, false))
+				.Replace("%reason%", ev.Reason));
 		}
-		internal bool Ally(Player pl, Player target)
+
+		[EventMethod(ServerEvents.GameConsoleCommand, int.MinValue)]
+		static void SendingConsole(GameConsoleCommandEvent ev)
 		{
-			var targetTeam = target.Team;
-			if (Cached.TryGetValue(target, out var role)) targetTeam = role.GetTeam();
-			if (targetTeam == pl.Team) return true;
-			if (targetTeam == Team.SCP && pl.Team == Team.SCP) return true;
-			if ((targetTeam == Team.MTF || targetTeam == Team.RSC) && (pl.Team == Team.MTF || pl.Team == Team.RSC)) return true;
-			if ((targetTeam == Team.CHI || targetTeam == Team.CDP) && (pl.Team == Team.CHI || pl.Team == Team.CDP)) return true;
-			return false;
+			if (ev.Player is null || ev.Player == Server.Host)
+				return;
+
+			if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+				return;
+
+			Send.Msg(Cfg.Translate.Console
+				.Replace("%player%", Api.PlayerInfo(ev.Player))
+				.Replace("%command%", $"{Api.AntiMD(ev.Command)}")
+			);
 		}
-		internal static void UpdateServerStatus()
-		{
-			try
-			{
-				int max = GameCore.ConfigFile.ServerConfig.GetInt("max_players", 35);
-				int cur = Player.List.Count();
-				int aliveCount = 0;
-				int scpCount = 0;
-				foreach (Player player in Player.List)
-					if (player.ReferenceHub.characterClassManager.IsHuman()) aliveCount++;
-					else if (player.ReferenceHub.characterClassManager.IsAnyScp()) scpCount++;
-				string warhead = Alpha.Detonated ? Cfg.T53 : Alpha.Active ? Cfg.T54 : Cfg.T55;
-				Send.ChannelTopic(Cfg.T56.Replace("%players%", $"{cur}/{max}").Replace("%time%", $"{Round.ElapsedTime.Minutes}").Replace("%alive%", $"{aliveCount}").Replace("%scps%", $"{scpCount}").Replace("%alpha%", $"{warhead}").Replace("%ip%", $"{ServerConsole.Ip}:{Server.Port}"));
-			}
-			catch { }
-		}
-		internal void SendingRA(SendingRAEvent ev)
+
+		[EventMethod(ServerEvents.RemoteAdminCommand, int.MinValue)]
+		static void RemoteAdminCommand(RemoteAdminCommandEvent ev)
 		{
 			try
 			{
 				#region logs
-				if (ev.Player == null) return;
-				if (ev.Player == Server.Host) return;
-				if (ev.Player.UserId == "") return;
-				if (ev.Player.Nickname == "Dedicated Server") return;
-				if (Send.BlockInRaLogs(ev.Player.UserId)) return;
-				string Args = ev.Command.ToLower().Replace($"{ev.Name} ", "");
+				if (ev.Name.StartsWith("$"))
+					return;
+				if (ev.Player == null)
+					return;
+				if (ev.Player == Server.Host)
+					return;
+				if (ev.Player.UserInformation.UserId == "")
+					return;
+				if (ev.Player.UserInformation.Nickname == "Dedicated Server")
+					return;
+				if (Send.GLobalBypass(ev.Player.UserInformation.UserId))
+					return;
+				if (Send.BlockInRaLogs(ev.Player.UserInformation.UserId))
+					return;
+
+				string Args = string.Join(" ", ev.Args);
 				string msg = "";
 				string d = Cfg.Delimiter;
+
 				try
 				{
-					if (ev.Name == "forceclass")
+					switch (ev.Name)
 					{
-						string targets = "";
-						RoleType role = RoleType.None;
-						var role_id = 0;
-						if (ev.Args.Count() > 1)
-						{
-							string[] spearator = { "." };
-							string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
-							foreach (string s in strlist)
+						case "forceclass":
 							{
-								try { targets += $"{s}{d}{Player.Get(int.Parse(s)).Nickname}{d} "; } catch { }
+								string targets = "";
+
+								string role = ev.Args.Length > 1 ? ev.Args[1] : ev.Args[0];
+								if (ev.Args.Count() > 1)
+								{
+									string[] spearator = { "." };
+									string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
+									foreach (string s in strlist)
+									{
+										try { targets += $"{s}{d}{int.Parse(s).GetPlayer()?.UserInformation.Nickname}{d} "; } catch { }
+									}
+								}
+								msg = $"{ev.Name} {targets} {role} {Args.Replace(ev.Args[0], "").Replace($"{role}", "")}";
+								break;
 							}
-							try { role_id = Convert.ToInt32(ev.Args[1]); } catch { }
-							try { role = (RoleType)Convert.ToInt32(ev.Args[1]); } catch { }
-						}
-						else
-						{
-							try { role_id = Convert.ToInt32(ev.Args[0]); } catch { }
-							try { role = (RoleType)Convert.ToInt32(ev.Args[0]); } catch { }
-						}
-						msg = $"{ev.Name} {targets} {role_id}{d}{role}{d} {Args.Replace(ev.Args[0], "").Replace($"{role_id}", "")}";
-					}
-					else if (ev.Name == "request_data")
-					{
-						string targets = "";
-						string[] spearator = { "." };
-						string[] strlist = ev.Args[1].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
-						foreach (string s in strlist)
-						{
-							targets += $"{s}{d}{Player.Get(int.Parse(s))?.Nickname}{d} ";
-						}
-						msg = $"{ev.Name} {ev.Args[0]} {targets} {Args.Replace(ev.Args[0].ToLower(), "").Replace(ev.Args[1].ToLower(), "")}";
-					}
-					else if (ev.Name == "give")
-					{
-						string targets = "";
-						ItemType item = ItemType.Coin;
-						var item_id = 0;
-						if (ev.Args.Count() > 1)
-						{
-							string[] spearator = { "." };
-							string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
-							foreach (string s in strlist)
+						case "request_data":
 							{
-								try { targets += $"{s}{d}{Player.Get(int.Parse(s)).Nickname}{d} "; } catch { }
+								string targets = "";
+								string[] spearator = { "." };
+								string[] strlist = ev.Args[1].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
+								foreach (string s in strlist)
+								{
+									targets += $"{s}{d}{int.Parse(s).GetPlayer()?.UserInformation.Nickname}{d} ";
+								}
+								msg = $"{ev.Name} {ev.Args[0]} {targets} {Args.Replace(ev.Args[0].ToLower(), "").Replace(ev.Args[1].ToLower(), "")}";
+								break;
 							}
-							try { item = (ItemType)Convert.ToInt32(ev.Args[1]); } catch { }
-							try { item_id = Convert.ToInt32(ev.Args[1]); } catch { }
-						}
-						else
-						{
-							try { item = (ItemType)Convert.ToInt32(ev.Args[0]); } catch { }
-							try { item_id = Convert.ToInt32(ev.Args[0]); } catch { }
-						}
-						msg = $"{ev.Name} {targets} {item_id}{d}{item}{d} {Args.Replace(ev.Args[0], "").Replace($"{item_id}", "")}";
-					}
-					else if (ev.Name == "overwatch" || ev.Name == "bypass" || ev.Name == "heal" || ev.Name == "god" || ev.Name == "noclip" || ev.Name == "doortp" || ev.Name == "bring"
-						|| ev.Name == "mute" || ev.Name == "unmute" || ev.Name == "imute" || ev.Name == "iunmute")
-					{
-						string targets = "";
-						string[] spearator = { "." };
-						string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
-						foreach (string s in strlist)
-						{
-							try { targets += $"{s}{d}{Player.Get(int.Parse(s))?.Nickname}{d} "; } catch { }
-						}
-						msg = $"{ev.Name} {targets} {Args.Replace(ev.Args[0], "")}";
-					}
-					else if (ev.Name == "goto")
-					{
-						string target = $"{ev.Args[0]}{d}{Player.Get(int.Parse(ev.Args[0]))?.Nickname}{d} ";
-						msg = $"{ev.Name} {target} {Args.Replace(ev.Args[0], "")}";
-					}
-					else
-					{
-						msg = $"{ev.Command}";
+						case "give":
+							{
+								string targets = "";
+								string itemsstr = "";
+								string itemsoriginal = "";
+
+								if (ev.Args.Count() > 1)
+								{
+									string[] spearator = { "." };
+									string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
+									foreach (string s in strlist)
+									{
+										try { targets += $"{s}{d}{int.Parse(s).GetPlayer()?.UserInformation.Nickname}{d} "; } catch { }
+									}
+
+									string[] items = ev.Args[1].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
+									foreach (string s in items)
+									{
+										try { itemsstr += $"{s}{d}{(ItemType)int.Parse(s)}{d}"; } catch { }
+									}
+
+									itemsoriginal = ev.Args[1];
+								}
+								else
+								{
+									string[] spearator = { "." };
+									string[] items = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
+									foreach (string s in items)
+									{
+										try { itemsstr += $"{s}{d}{(ItemType)int.Parse(s)}{d}"; } catch { }
+									}
+
+									itemsoriginal = ev.Args[0];
+								}
+								msg = $"{ev.Name} {targets} {itemsstr} {Args.Replace(ev.Args[0], "").Replace($"{itemsoriginal}", "")}";
+								break;
+							}
+						case "overwatch" or "bypass" or "heal" or "god" or "noclip" or "doortp" or "bring"
+							or "mute" or "unmute" or "imute" or "iunmute" or "goto":
+							{
+								string targets = "";
+								string[] spearator = { "." };
+								string[] strlist = ev.Args[0].Split(spearator, 2, StringSplitOptions.RemoveEmptyEntries);
+								foreach (string s in strlist)
+								{
+									try { targets += $"{s}{d}{int.Parse(s).GetPlayer()?.UserInformation.Nickname}{d} "; } catch { }
+								}
+								msg = $"{ev.Name} {targets} {Args.Replace(ev.Args[0], "")}";
+								break;
+							}
+						default:
+							{
+								msg = $"{ev.Command}";
+								break;
+							}
+
 					}
 				}
 				catch
 				{
 					msg = $"{ev.Command}";
 				}
-				Send.Msg(Cfg.T57.Replace("%command%", Send.AntiMD(msg)).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
-				Send.RemoteAdmin(Cfg.T57.Replace("%command%", Send.AntiMD(msg)).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
+				Send.Msg(Cfg.Translate.Ra.Replace("%command%", Api.AntiMD(msg)).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
+				Send.RemoteAdmin(Cfg.Translate.Ra.Replace("%command%", Api.AntiMD(msg)).Replace("%player%", Api.PlayerInfo(ev.Player, false)));
 				#endregion
 			}
 			catch { }
 		}
-		internal void Ban(BannedEvent ev) => Send.BanKick(ev.Details.Reason, Api.PlayerInfo(ev.Player, false), Send.AntiMD(ev.Details.Issuer), $"<t:{new DateTimeOffset(new DateTime(ev.Details.Expires).AddHours((DateTime.Now - DateTime.UtcNow).TotalHours)).ToUnixTimeSeconds()}:f>");
-		internal void Kick(KickEvent ev) => Send.BanKick(ev.Reason, Api.PlayerInfo(ev.Target, false), Send.AntiMD(ev.Issuer.Nickname), "kick");
+		#endregion
+
+
+		internal static void UpdateServerStatus()
+		{
+			try
+			{
+				int max = GameCore.ConfigFile.ServerConfig.GetInt("max_players", 35);
+				int cur = Player.List.Count();
+
+				int aliveCount = 0;
+				int scpCount = 0;
+
+				foreach (Player player in Player.List)
+					if (player.RoleInformation.IsHuman)
+						aliveCount++;
+					else if (player.RoleInformation.IsScp)
+						scpCount++;
+
+				string warhead = Alpha.Detonated ? Cfg.Translate.AlphaDetonated :
+					(Alpha.Active ? Cfg.Translate.AlphaActive :
+					Cfg.Translate.AlphaNotDetonated);
+
+				Send.ChannelTopic(Cfg.Translate.RoundInfo.Replace("%players%", $"{cur}/{max}")
+					.Replace("%time%", $"{Round.ElapsedTime.Minutes}")
+					.Replace("%alive%", $"{aliveCount}")
+					.Replace("%scps%", $"{scpCount}")
+					.Replace("%alpha%", $"{warhead}")
+					.Replace("%ip%", $"{ServerConsole.Ip}:{Server.Port}")
+					.Replace("%date%", Send.GetTime));
+			}
+			catch { }
+		}
+
+		static bool Ally(Player pl1, Player pl2)
+		{
+			if (Cached.TryGetValue(pl2, out var role))
+				return pl1.RoleInformation.Faction == role.GetFaction();
+
+			return pl1.RoleInformation.Faction == pl2.RoleInformation.Faction;
+		}
 	}
 }
+#pragma warning restore IDE0051

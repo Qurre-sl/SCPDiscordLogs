@@ -3,30 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Qurre.API;
 using QurreSocket;
+
 namespace SCPDiscordLogs
 {
-    internal static class Send
+    static class Send
     {
         #region ClosePls
-        public static string AntiMD(string text)
-        {
-            return text.Replace("_", "\\_").Replace("*", "\\*").Replace("|", "\\|").Replace("~", "\\~").Replace("`", "\\`").Replace("<@", "\\<\\@").Replace("@", "\\@").Replace("@e", "@е").Replace("@he", "@hе");
-        }
-        public static bool BlockInRaLogs(string UserID) => UserIDs().Contains(UserID);
-        private static List<string> UserIDs()
-        {
-            string _ = Cfg.BlockRa;
-            string[] str = _.Split(',');
-            List<string> strl = new();
-            foreach (string st in str) strl.Add(st.Trim());
-            return strl;
-        }
+        static internal bool BlockInRaLogs(string UserID) => Cfg.BlockRa.Contains(UserID);
+        static internal bool GLobalBypass(string UserID) => Cfg.GlobalInvisible.Contains(UserID);
         #endregion
-        internal static Client Client;
-        internal static string msg = "";
-        internal static string last_msg = "";
-        private static string GetTime => $"<t:{DateTimeOffset.Now.ToUnixTimeSeconds()}:T>";
-        internal static void FatalMsg()
+        static internal Client Client;
+        static internal string msg = "";
+        static internal string last_msg = "";
+
+        static internal string GetTime => $"<t:{DateTimeOffset.Now.ToUnixTimeSeconds()}:T>";
+
+        static internal void FatalMsg()
         {
             try
             {
@@ -42,23 +34,28 @@ namespace SCPDiscordLogs
                 msg = "";
             }
         }
-        internal static void Msg(string data)
+        static internal void Msg(string data)
         {
-            if (msg.Length > 1500) FatalMsg();
             if (last_msg == data) return;
+            if (msg.Length > 1500) FatalMsg();
             last_msg = data;
             msg += $"[{GetTime}] {data}";
             msg += "\n";
         }
-        internal static void PlayersInfo()
+
+        static internal void PlayersInfo()
         {
             try { Client.Emit("players", new object[] { Player.List.Count() }); } catch { }
         }
-        internal static void ChannelTopic(string data)
+        static internal void ChannelTopic(string data)
         {
+            if (!Cfg.EnablesSetTopic)
+                return;
+
             try { Client.Emit("channelstatus", new string[] { data }); } catch { }
         }
-        internal static void RemoteAdmin(string data)
+
+        static internal void RemoteAdmin(string data)
         {
             try { Client.Emit("ra", new string[] { $"[{GetTime}] {data}" }); }
             catch
@@ -68,7 +65,8 @@ namespace SCPDiscordLogs
                 webhk.Send($"[{GetTime}] {data}");
             }
         }
-        internal static void TeamKill(string data)
+
+        static internal void TeamKill(string data)
         {
             if (Round.Started)
             {
@@ -81,7 +79,8 @@ namespace SCPDiscordLogs
                 }
             }
         }
-        internal static void BanKick(string reason, string banned, string banner, string time)
+
+        static internal void BanKick(string reason, string banned, string banner, string time)
         {
             try
             {
@@ -95,17 +94,19 @@ namespace SCPDiscordLogs
                 List<Embed> listEmbed = new();
                 Embed embed = new();
                 EmbedAuthor author = new();
-                EmbedFooter footer = new();
-                footer.Text = "© Qurre Team";
-                footer.IconUrl = "https://cdn.scpsl.store/qurre/qurre_ol.png";
-                var ttl = Cfg.Ban;
+                EmbedFooter footer = new()
+                {
+                    Text = "© Qurre Team",
+                    IconUrl = "https://cdn.scpsl.store/qurre/qurre_ol.png"
+                };
+                var ttl = Cfg.Translate.Ban;
                 var color = 16711680;
-                var desc = Cfg.Ban_msg.Replace("%banned%", $"{banned}").Replace("%banner%", $"{banner}").Replace("%reason%", $"{reason}").Replace("%to%", $"{time}");
+                var desc = Cfg.Translate.BanWebHook.Replace("%banned%", $"{banned}").Replace("%banner%", $"{banner}").Replace("%reason%", $"{reason}").Replace("%to%", $"{time}");
                 if (time == "kick")
                 {
-                    ttl = Cfg.Kick;
+                    ttl = Cfg.Translate.Kick;
                     color = 16776960;
-                    desc = Cfg.Kick_msg.Replace("%kicked%", $"{banned}").Replace("%kicker%", $"{banner}").Replace("%reason%", $"{reason}");
+                    desc = Cfg.Translate.KickWebHook.Replace("%kicked%", $"{banned}").Replace("%kicker%", $"{banner}").Replace("%reason%", $"{reason}");
                 }
                 author.Name = Cfg.ServerName;
                 author.IconUrl = Cfg.Avatar;
@@ -118,7 +119,8 @@ namespace SCPDiscordLogs
                 webhk.Send("", embeds: listEmbed);
             }
         }
-        internal static void Reply(string data)
+
+        static internal void Reply(string data)
         {
             try { Client.Emit("reply", new string[] { $"[{GetTime}] {data}" }); }
             catch
@@ -128,15 +130,27 @@ namespace SCPDiscordLogs
                 webhk.Send($"[{GetTime}] {data}");
             }
         }
-        internal static void Disconnect() => Client.Disconnect(false);
-        internal static void Init()
+
+        static internal void Disconnect() => Client.Disconnect(false);
+        static internal void Init()
         {
             Client = new(Cfg.Port, Cfg.Ip);
             Client.On("connect", _ => Client.Emit("send.token", new object[] { Cfg.Token }));
-            Client.On("send-to-ra", (data) => { try { GameCore.Console.singleton.TypeCommand($"/{data[1]}", new BotSender($"{data[0]}")); } catch { } });
+            Client.On("send-to-ra", (data) =>
+            {
+                try
+                {
+                    GameCore.Console.singleton.TypeCommand($"/{data[1]}", new BotSender($"{data[0]}"));
+                }
+                catch (Exception e)
+                {
+                    Log.Debug(e);
+                }
+            });
         }
     }
-    internal class BotSender : CommandSender
+
+    class BotSender : CommandSender
     {
         public override void RaReply(string text, bool success, bool logToConsole, string overrideDisplay)
         {
@@ -146,8 +160,10 @@ namespace SCPDiscordLogs
         {
             Send.Reply($"{text}");
         }
+
         public string Name;
         public BotSender(string name) => Name = name;
+
         public override string SenderId => "SERVER CONSOLE";
         public override string Nickname => Name;
         public override ulong Permissions => ServerStatic.GetPermissionsHandler().FullPerm;
