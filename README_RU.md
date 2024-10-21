@@ -12,7 +12,7 @@
 
 <h1 align="center">SCPLogs</h1>
 <p align="center">
-<img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&pause=1000&color=3FF781&center=true&vCenter=true&width=435&lines=U want? Just do it.;Are you lazy? Use one command.;Specific needs? We're on our way.">
+<img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&pause=1000&color=3FF781&center=true&vCenter=true&width=435&lines=U+want?+Just+do+it.;Are+you+lazy?+Use+one+command.;Specific+needs?+We're+on+our+way.">
 </p>
 <p align="center">
 Первый плагин в своем роде, предоставляющий максимально возможную кастомизацию.
@@ -146,3 +146,5 @@ end
 / гайд для развертывания докера /
 <h3 align="center">Ручная</h3>
 / в процессе /
+
+<p align="center"><img src="https://count.getloli.com/get/@SCPLogs"></p>
